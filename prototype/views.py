@@ -7,11 +7,35 @@ concerns = Blueprint('concerns', __name__, template_folder='templates')
 
 class ListView(MethodView):
 
-    # form = model_form(Concern)
+    form = model_form(Concern, exclude=['created_at'])
+
+    def get_context(self):
+        concerns = Concern.objects.all()
+        form = self.form(request.form)
+
+        context = {
+            "concerns": concerns,
+            "form": form
+        }
+
+        return context
 
     def get(self):
-        concerns = Concern.objects.all()
-        return render_template('concerns/list.html', concerns=concerns)
+        context = self.get_context()
+        return render_template('concerns/list.html', **context)
+
+    def post(self):
+
+        context = self.get_context()
+        form = context.get('form')
+
+        if form.validate():
+            concern = Concern()
+            form.populate_obj(concern)
+            concern.save()
+
+        context = self.get_context()
+        return render_template('concerns/list.html', **context)
 
 # Register the urls
 concerns.add_url_rule('/', view_func=ListView.as_view('list'))
