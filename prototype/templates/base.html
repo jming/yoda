@@ -3,32 +3,38 @@
   <head>
     <meta charset="utf-8">
     <title>YODA</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <style>.content {padding-top: 80px;} a.brand {color: #fff }</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+    <link rel="stylesheet" href="swipe.css">
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <script src="swipe.js"></script>
   </head>
 
   <body>
 
-    {%- block topbar -%}
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <h2>
-              <a href="/" class="brand">YODA</a> <small>Your Organizer for Doctor Appointments</small>
-          </h2>
-        </div>
-        <div class="collapse navbar-collapse">
-        </div><!--/.nav-collapse -->
+    <div data-role="page">
+      <div data-role="header">
+        <h1>YODA</h1>
       </div>
-    </div>
-    {%- endblock -%}
-
-    <div class="container">
-      <div class="content">
+      <div data-role="content">
         {% block page_header %}{% endblock %}
         {% block content %}{% endblock %}
       </div>
     </div>
+
+    <div id="confirm" class="ui-content" data-role="popup" data-theme="none">
+      <p id="question">Are you sure you want to delete?</p>
+      <div class="ui-grid-a">
+        <div class="ui-block-a">
+          <a id="yes" data-role="button" data-mini="true" data-shadow="false" data-theme="b" data-rel="back">Yes</a>
+        </div>
+        <div class="ui-block-b">
+          <a id="cancel" data-role="button" data-mini="true" data-shadow="false" data-theme="b" data-rel="back">Cancel</a>
+        </div>
+      </div>
+    </div>
+
     {% block js_footer %}{% endblock %}
   </body>
 </html>

@@ -3,20 +3,24 @@
 
 {% block content %}
   <h2> Current concerns </h2>
-  <ul>
+  <ul 
+    data-role="listview" 
+    data-inset="true" 
+    id="list" 
+    class="touch" 
+    data-icon="false" 
+    data-split-icon="delete" 
+    data-split-theme="d">
     {% for concern in concerns %}
-      <li> 
-        <b>{{ concern.text }}:</b>
-        {{ concern.created_at.strftime('%H:%M %Y-%m-%d') }}
-      </li>
+      <li><a href="#">{{ concern.text }}</a></li>
     {% endfor %}
   </ul>
   <hr>
   <h2> Add a concern </h2>
   <form action="." method="post">
     {{ forms.render(form) }}
-    <div class="actions">
-      <input type="submit" class="btn primary" value="comment">
+    <div data-role="fieldcontain">
+      <input type="submit" class="btn primary" value="Submit">
     </div>
   </form>
 {% endblock %}
