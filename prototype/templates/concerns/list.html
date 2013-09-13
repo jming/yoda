@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% import "_forms.html" as forms %}
+
+{% block content %}
+  <h2> Current concerns </h2>
+  <ul>
+    {% for concern in concerns %}
+      <li> 
+        <b>{{ concern.text }}:</b>
+        {{ concern.created_at.strftime('%H:%M %Y-%m-%d') }}
+      </li>
+    {% endfor %}
+  </ul>
+<!--   <hr>
+  <h2> Add a concern </h2>
+  <form action="." method="post">
+    {{ forms.render(form) }}
+    <div class="actions">
+      <input type="submit" class="btn primary" value="comment">
+    </div>
+  </form> -->
+{% endblock %}
