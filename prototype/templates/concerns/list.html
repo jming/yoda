@@ -3,16 +3,18 @@
 
 {% block content %}
   <h2> Current concerns </h2>
-  <ul 
-    data-role="listview" 
-    data-inset="true" 
-    id="list" 
-    class="touch" 
-    data-icon="false" 
-    data-split-icon="delete" 
+  <ul id="list"
+    class="touch"
+    data-role="listview"
+    data-icon="false"
+    data-inset="true"
+    data-split-icon="delete"
     data-split-theme="d">
     {% for concern in concerns %}
-      <li><a href="#">{{ concern.text }}</a></li>
+      <li>
+        <a href="#">{{ concern.text }}</a>
+        <a href="#" class="delete">Delete</a>
+      </li>
     {% endfor %}
   </ul>
   <hr>
