@@ -1,7 +1,9 @@
 $( document ).on( "pageinit", "#", function() {
+	window.alert("loading");
 	
 	// Swipe to remove list item
 	$( document ).on( "swipeleft swiperight", "#list li.ui-li", function( event ) {
+		window.alert("clicked!");
 		var listitem = $( this ),
 			// These are the classnames used for the CSS transition
 			dir = event.type === "swipeleft" ? "left" : "right",
@@ -19,6 +21,7 @@ $( document ).on( "pageinit", "#", function() {
 		
 		// Click delete split-button to remove list item
 		$( ".delete" ).on( "click", function() {
+			window.alert("clicked!");
 			var listitem = $( this ).parent( "li.ui-li" );
 			
 			confirmAndDelete( listitem );
