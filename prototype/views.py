@@ -39,3 +39,4 @@ class ListView(MethodView):
 
 # Register the urls
 concerns.add_url_rule('/', view_func=ListView.as_view('list'))
+concerns.add_url_rule('#confirm')
