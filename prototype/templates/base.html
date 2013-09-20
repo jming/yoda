@@ -136,6 +136,7 @@
             }
             // If it's not a touch device or the CSS transition isn't supported just remove the list item and refresh the list
             else {
+              removeItem(listitem);
               listitem.remove();
               $( "#list" ).listview( "refresh" );
             }
@@ -144,6 +145,14 @@
           $( "#confirm #cancel" ).on( "click", function() {
             listitem.removeClass( "ui-btn-down-d" );
             $( "#confirm #yes" ).off(); 
+          });
+        }
+
+        function removeItem(listitem) {
+          window.alert("removing!");
+          $.post("delete_item", {
+            // window.alert("deleting!")
+            text: "text"
           });
         }
       });

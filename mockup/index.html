@@ -1,0 +1,162 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+    <title>Taska</title>
+    
+    <!-- meta data -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="Description" content="Taco Findr - for the iPhone." />
+    <meta name="keywords" content="" />
+    <meta name="Author" content="Aldo Lugo" />
+    <meta http-equiv="Content-Language" content="en-gb" />
+    <meta name="language" content="English" />
+    <meta name="copyright" content="Copyright Time" />
+    <meta name="robots" content="index,follow" />
+    <meta name="revisit-after" content="7 Days" />
+    <meta http-equiv="imagetoolbar" content="false" />
+    
+    <!-- apple web app -->
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    
+    <link rel="stylesheet" href="css/jquery.mobile-1.0b1.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript" src="script/jquery.mobile-1.0b1.min.js"></script>
+    <script type="text/javascript" src="script/app.js"></script>
+    <link rel="stylesheet" href="css/themes/custom-theme.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+        .ui-btn-text {
+            white-space: normal !important;
+        }
+        .ui-li-desc {
+            white-space: normal !important;
+        }
+        .ui-li-has-icon .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-icon {
+            min-height: 20px;
+            padding-left: 32px !important;
+        }
+        #noErrors{
+            color:#000;
+            text-align:center;
+            background-color:#fff5c2;
+        }
+        .ui-header .ui-title,
+        .ui-footer .ui-title {
+            font-weight:300;
+            font-size:24px;
+        }
+        *, .ui-body-a input {
+            font-family:"Lato";
+            font-weight:400;
+        }
+        .ui-header .ui-btn-right,
+        .ui-footer .ui-button-right {
+            right:20px;
+            top:15px;
+        }
+    </style>
+    <script>
+        // Set details for given concern
+        function set_details(id) {
+            $("#detail-concern")[0].value = localStorage.getItem("task-"+id);
+            $("#detail-raised-by")[0].value = localStorage.getItem("task-"+id+"-raised-by");
+            $('#detail-pending-for')[0].value = localStorage.getItem("task-"+id+"-pending-for");
+            $('#detail-urgency')[0].value = localStorage.getItem("task-"+id+"-urgency");
+        }
+    </script>
+</head> 
+<body> 
+
+
+<div data-role="page" id="TaskView">
+    <div data-role="header" data-theme="a">
+        <a href="#AddTasks" data-role="button" class="ui-btn-right homeBtn" data-theme="a" data-icon="plus" data-transition="slideup">Add</a>
+        <h1>Concerns List</h1>
+    </div>
+    <div data-role="content">
+        <ul data-role="listview" data-theme="a" id="tasks" data-inset="true">
+            <p id="noErrors" style="display:none;">You have no concerns.</p>
+        </ul>
+    </div>
+</div>
+
+
+<div data-role="page" id="AddTasks">
+    
+    <div data-role="header" data-theme="a">
+    <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
+        <h1>Add New Concern</h1>
+    </div>
+        <div data-role="content">
+            <div class="form-area">
+                <form id="tasks-form"> 
+                    <div data-role="fieldcontain">
+                        <label for="taskName"> Concern: </label>
+                        <input type="text" name="taskName" id="taskName" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="raised-by" class="select">Raised by:</label>
+                        <select name="raised-by" id="raised-by">
+                            <option value="Mom">Mom</option>
+                            <option value="Dad">Dad</option>
+                            <option value="Sister">Sister</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="pending-for" class="select">Pending for:</label>
+                        <select name="pending-for" id="pending-for">
+                            <option value="Potter">Dr. Potter</option>
+                            <option value="Weasley">Dr. Weasley</option>
+                            <option value="Granger">Dr. Granger</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup" data-type="horizontal">
+                            <legend>Urgency:</legend>
+                                <input type="radio" name="urgency-choice" id="High" value="on" checked="checked" />
+                                <label for="High">High</label>
+                                <input type="radio" name="urgency-choice" id="Medium" value="off" />
+                                <label for="Medium">Medium</label>
+                                <input type="radio" name="urgency-choice" id="Low" value="other" />
+                                <label for="Low">Low</label>
+                        </fieldset>
+                    </div>
+                    <input type="button" value="Add" id="addTask" data-icon="plus"/>
+                </form>    
+            </div>
+        </div>
+</div>
+
+<div data-role="page" id="TaskDetails">
+
+    <div data-role="header" data-theme="a">
+    <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
+        <h1>Task Details</h1>
+    </div>
+    <div data-role="content">
+        <div class="content-primary">
+            <form>
+                <div data-role="fieldcontain">
+                    <label for="detail-concern">Concern:</label>
+                    <input type="text" name="detail-concern" id="detail-concern" disabled />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="detail-raised-by">Raised by:</label>
+                    <input type="text" name="detail-raised-by" id="detail-raised-by" disabled />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="detail-pending-for">Pending for:</label>
+                    <input type="text" name="detail-pending-for" id="detail-pending-for" disabled />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="detail-urgency">Urgency:</label>
+                    <input type="text" name="detail-urgency" id="detail-urgency" disabled />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
