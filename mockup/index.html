@@ -47,7 +47,9 @@
             font-weight:300;
             font-size:24px;
         }
-        *, .ui-body-a input {
+        *, 
+        .ui-body-a input,
+        .ui-body-c input {
             font-family:"Lato";
             font-weight:400;
         }
@@ -56,6 +58,7 @@
             right:20px;
             top:15px;
         }
+
     </style>
     <script>
         // Set details for given concern
@@ -77,7 +80,7 @@
     </div>
     <div data-role="content">
         <ul data-role="listview" data-theme="a" id="tasks" data-inset="true">
-            <p id="noErrors" style="display:none;">You have no concerns.</p>
+            <p id="noErrors" style="display:none;">You currently have no concerns stored.</p>
         </ul>
     </div>
 </div>
@@ -113,14 +116,14 @@
                         </select>
                     </div>
                     <div data-role="fieldcontain">
-                        <fieldset data-role="controlgroup" data-type="horizontal">
-                            <legend>Urgency:</legend>
-                                <input type="radio" name="urgency-choice" id="High" value="on" checked="checked" />
-                                <label for="High">High</label>
-                                <input type="radio" name="urgency-choice" id="Medium" value="off" />
-                                <label for="Medium">Medium</label>
-                                <input type="radio" name="urgency-choice" id="Low" value="other" />
-                                <label for="Low">Low</label>
+                        <fieldset data-role="controlgroup" data-type="horizontal" data-theme="a">
+                            <legend data-theme="a">Urgency:</legend>
+                                <input type="radio" name="urgency-choice" id="High" value="on" checked="checked" data-theme="a" data-corners="false"/>
+                                <label for="High" data-theme="a">High</label>
+                                <input type="radio" name="urgency-choice" id="Medium" value="off" data-theme="a"/>
+                                <label for="Medium" data-theme="a">Medium</label>
+                                <input type="radio" name="urgency-choice" id="Low" value="other" data-theme="a"/>
+                                <label for="Low" data-theme="a">Low</label>
                         </fieldset>
                     </div>
                     <input type="button" value="Add" id="addTask" data-icon="plus"/>
@@ -133,7 +136,7 @@
 
     <div data-role="header" data-theme="a">
     <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
-        <h1>Task Details</h1>
+        <h1>Concern Details</h1>
     </div>
     <div data-role="content">
         <div class="content-primary">

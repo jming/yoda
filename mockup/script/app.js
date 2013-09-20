@@ -42,7 +42,7 @@ $(function(){
 				+ "<a href='#TaskDetails' class='editable' data-split-theme='a' onclick='set_details(" +i+ ")'>"
 				+  "<img src='t.png' alt='Task' class='ui-li-icon ui-li-thumb'>"
 				+ localStorage.getItem("task-" + i) 
-				+ " </a><a href='#' data-icon='delete' class='close' data-theme='a'>x</a></li>"
+				+ " </a><a href='#' data-icon='delete' class='close' data-theme='a'>Delete</a></li>"
 			);
 			$.mobile.changePage("#TaskView");		
 			listTasks();
@@ -54,11 +54,6 @@ $(function(){
 		}
 		return false;
 	});	
-
-    // function set_details(id) {
-    //     window.alert("HERE!");
-    //     $("#detail-concern").text;
-    // }
 
 	// Remove Task
 	$("#tasks li a.close").live("tap", function() {
