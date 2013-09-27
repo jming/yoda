@@ -1,92 +1,70 @@
 <!DOCTYPE html> 
 <html> 
     <head> 
-    <title>Taska</title>
+    <title>YODA</title>
+
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-alpha.2/jquery.mobile-1.4.0-alpha.2.min.css" />
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.0-alpha.2/jquery.mobile-1.4.0-alpha.2.min.js"></script>
     
-    <!-- meta data -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="Description" content="Taco Findr - for the iPhone." />
-    <meta name="keywords" content="" />
-    <meta name="Author" content="Aldo Lugo" />
-    <meta http-equiv="Content-Language" content="en-gb" />
-    <meta name="language" content="English" />
-    <meta name="copyright" content="Copyright Time" />
-    <meta name="robots" content="index,follow" />
-    <meta name="revisit-after" content="7 Days" />
-    <meta http-equiv="imagetoolbar" content="false" />
-    
-    <!-- apple web app -->
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    
-    <link rel="stylesheet" href="css/jquery.mobile-1.0b1.css" />
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <script type="text/javascript" src="script/jquery.mobile-1.0b1.min.js"></script>
     <script type="text/javascript" src="script/app.js"></script>
     <link rel="stylesheet" href="css/themes/custom-theme.css" />
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
     <style type="text/css">
-        .ui-btn-text {
-            white-space: normal !important;
-        }
-        .ui-li-desc {
-            white-space: normal !important;
-        }
-        .ui-li-has-icon .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-icon {
-            min-height: 20px;
-            padding-left: 32px !important;
-        }
-        #noErrors{
-            color:#000;
-            text-align:center;
-            background-color:#fff5c2;
-        }
         .ui-header .ui-title,
         .ui-footer .ui-title {
             font-weight:300;
             font-size:24px;
         }
         *, 
+        body,
+        input,
+        select,
+        textarea,
+        button,
+        .ui-btn,
         .ui-body-a input,
-        .ui-body-c input {
+        .ui-body-b input,
+        .ui-body-c input,
+        .ui-overlay-a a, .ui-page-theme-a a, html .ui-bar-a a, html .ui-body-a a, html body .ui-group-theme-a a,
+        .ui-bar-a a.ui-link,
+        .ui-mobile label, div.ui-controlgroup-label
+        {
             font-family:"Lato";
             font-weight:400;
         }
-        .ui-header .ui-btn-right,
-        .ui-footer .ui-button-right {
-            right:20px;
-            top:15px;
-        }
-
     </style>
-    <script>
-        // Set details for given concern
-        function set_details(id) {
-            $("#detail-concern")[0].value = localStorage.getItem("task-"+id);
-            $("#detail-raised-by")[0].value = localStorage.getItem("task-"+id+"-raised-by");
-            $('#detail-pending-for')[0].value = localStorage.getItem("task-"+id+"-pending-for");
-            $('#detail-urgency')[0].value = localStorage.getItem("task-"+id+"-urgency");
-        }
-    </script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 </head> 
 <body> 
 
 
-<div data-role="page" id="TaskView">
+<div data-role="page" id="LandingPage">
     <div data-role="header" data-theme="a">
-        <a href="#AddTasks" data-role="button" class="ui-btn-right homeBtn" data-theme="a" data-icon="plus" data-transition="slideup">Add</a>
+        <h1>YODA</h1>
+    </div>
+    <div data-role="content" data-theme="a">
+        <h2> Welcome to YODA, <br /> Your Organizer for Doctor Appointments</h2> 
+        <a href="#TaskView" data-role="button" data-inline="true" class="role-button" style="width:47.5%">Parent </a>
+        <a href="#TaskView" data-role="button" data-inline="true" class="role-button" style="width:47.5%">Doctor </a>
+    </div>
+</div>
+
+
+<div data-role="page" id="TaskView" data-add-back-btn="true">
+    <div data-role="header" data-theme="a">
         <h1>Concerns List</h1>
     </div>
     <div data-role="content">
-        <ul data-role="listview" data-theme="a" id="tasks" data-inset="true">
+        <a href="#AddTasks" data-role="button" class="ui-btn" data-icon="plus">Add concern</a>
+        <ul data-role="listview" data-inset="true" id="concernList">
             <p id="noErrors" style="display:none;">You currently have no concerns stored.</p>
         </ul>
     </div>
 </div>
 
 
-<div data-role="page" id="AddTasks">
+<div data-role="page" id="AddTasks" data-add-back-btn="true">
     
     <div data-role="header" data-theme="a">
     <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
@@ -126,13 +104,13 @@
                                 <label for="Low" data-theme="a">Low</label>
                         </fieldset>
                     </div>
-                    <input type="button" value="Add" id="addTask" data-icon="plus"/>
+                    <input type="button" value="Add Concern" id="addTask" class="ui-btn" style="width:100%"/>
                 </form>    
             </div>
         </div>
 </div>
 
-<div data-role="page" id="TaskDetails">
+<div data-role="page" id="TaskDetails" data-add-back-btn="true">
 
     <div data-role="header" data-theme="a">
     <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
@@ -156,6 +134,10 @@
                 <div data-role="fieldcontain">
                     <label for="detail-urgency">Urgency:</label>
                     <input type="text" name="detail-urgency" id="detail-urgency" disabled />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="detail-date">Date raised:</label>
+                    <input type="text" name="detail-date" id="detail-date" disabled />
                 </div>
             </form>
         </div>

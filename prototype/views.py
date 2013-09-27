@@ -37,14 +37,5 @@ class ListView(MethodView):
         context = self.get_context()
         return render_template('concerns/list.html', **context)
 
-    def delete_item(request):
-
-        if request.method == "POST" and request.is_ajax:
-            msg = "The operation has been received correctly"
-            print request.POST
-            print "oops"
-
-        return HttpResponse(msg)
-
 # Register the urls
 concerns.add_url_rule('/', view_func=ListView.as_view('list'))

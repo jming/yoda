@@ -1,10 +1,10 @@
 $(function(){
-	 //localStorage.clear();
+
 	var i = Number(localStorage.getItem('task-counter')) + 1;
 	//var i = 1;
 	var j, k, orderList;
 	var $task = $("#taskName");
-	var $taskList = $("#tasks");
+	var $concernList = $("#concernList");
 	var order = [];
 	orderList = localStorage.getItem('task-orders');
 	
@@ -15,17 +15,17 @@ $(function(){
 	// Load todo list
 	orderList = orderList ? orderList.split(',') : [];   
 	for( j = 0, k = orderList.length; j < k; j++) {
-		$taskList.append(
+		$concernList.append(
 			"<li id='" + orderList[j] + "'>"
-			+ "<a class='editable' data-split-theme='a'>"
-			+ "<img src='t.png' alt='Task' class='ui-li-icon ui-li-thumb'>"	
-			+ localStorage.getItem(orderList[j]) 
-			+ "</a> <a href='#' class='close' data-icon='delete' data-theme='a'>X</a></li>"
+			+ "<a href='#TaskDetails' onclick='set_details("+orderList[j]+")'>" 
+			+ localStorage.getItem("task-" + orderList[j]) + "</a>" 
+			+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
+			+ "</li>"
 		);
 	}
 
 	// Add Task 
-	$("#addTask").live("tap", function() {
+	$(document).on("tap", "#addTask", function() {
 		if($task.val() != ""){
 			localStorage.setItem("task-"+i, $task.val());
 			localStorage.setItem("task-"+i+"-raised-by", $("#raised-by").val());
@@ -35,14 +35,15 @@ $(function(){
 				if (urgency[index].checked)
 					localStorage.setItem("task-"+i+"-urgency", urgency[index].id);
 			}
+			var currentdate = new Date();
+			localStorage.setItem("task-"+i+"-date", currentdate);
 			localStorage.setItem("task-counter",i);
 			$("#noErrors").css("display","none");
-			$taskList.append(
-				"<li id='task-" + i + "'>" 
-				+ "<a href='#TaskDetails' class='editable' data-split-theme='a' onclick='set_details(" +i+ ")'>"
-				+  "<img src='t.png' alt='Task' class='ui-li-icon ui-li-thumb'>"
-				+ localStorage.getItem("task-" + i) 
-				+ " </a><a href='#' data-icon='delete' class='close' data-theme='a'>Delete</a></li>"
+			$concernList.append(
+				"<li id='" + i + "'>"
+				+ "<a href='#TaskDetails' onclick='set_details("+i+")'>" + localStorage.getItem("task-"+i) + "</a>" 
+				+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
+				+ "</li>"
 			);
 			$.mobile.changePage("#TaskView");		
 			listTasks();
@@ -56,7 +57,7 @@ $(function(){
 	});	
 
 	// Remove Task
-	$("#tasks li a.close").live("tap", function() {
+	$(document).on("tap", "#concernList li a.close", function() {
 		//alert($(this).parent().attr("id"));
 		localStorage.removeItem($(this).parent().attr("id"));
 		 $(this).parent().slideUp('normal', function(){
@@ -66,9 +67,9 @@ $(function(){
 		 	
 		return false;
 	});
-	
+
 	function listTasks(){
-		var $taskLi = $("#tasks li");
+		var $taskLi = $("#concernList li");
 		order.length = 0;
 		
 		$taskLi.each(function(){
@@ -78,4 +79,31 @@ $(function(){
 		$('ul').listview('refresh');
 		localStorage.setItem("task-orders", order.join(","));	
 	}	
+
 });
+
+$(document).bind('pageinit', function() {
+    $( "#concernList" ).sortable();
+    $( "#concernList" ).disableSelection();
+    $( "#concernList" ).bind( "sortstop", function(event, ui) {
+    	var $taskLi = $("#concernList li");
+    	order = []
+		order.length = 0;
+		
+		$taskLi.each(function(){
+			var id = $(this).attr("id");
+			order.push(id);
+		});
+		$('ul').listview('refresh');
+		localStorage.setItem("task-orders", order.join(","));
+    	$('#concernList').listview('refresh');
+    });
+});
+
+function set_details(id) {
+    $("#detail-concern")[0].value = localStorage.getItem("task-"+id);
+    $("#detail-raised-by")[0].value = localStorage.getItem("task-"+id+"-raised-by");
+    $('#detail-pending-for')[0].value = localStorage.getItem("task-"+id+"-pending-for");
+    $('#detail-urgency')[0].value = localStorage.getItem("task-"+id+"-urgency");
+    $('#detail-date')[0].value = localStorage.getItem("task-"+id+"-date");
+}
