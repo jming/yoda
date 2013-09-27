@@ -12,8 +12,9 @@
     data-split-theme="d">
     {% for concern in concerns %}
       <li>
+        <!-- Should blur out the item -->
         <a href="#">{{ concern.text }}</a>
-        <a href="#" class="delete">Delete</a>
+        <a href="#confirm" class="delete">Delete</a>
       </li>
     {% endfor %}
   </ul>
@@ -25,4 +26,16 @@
       <input type="submit" class="btn primary" value="Submit">
     </div>
   </form>
+
+  <div id="confirm" class="ui-content" data-role="popup" data-theme="none">
+  <p id="question">Are you sure you want to delete?</p>
+  <div class="ui-grid-a">
+    <div class="ui-block-a">
+      <a id="yes" data-role="button" data-mini="true" data-shadow="false" data-theme="b" data-rel="back">Yes</a>
+    </div>
+    <div class="ui-block-b">
+      <a id="cancel" data-role="button" data-mini="true" data-shadow="false" data-theme="b" data-rel="back">Cancel</a>
+    </div>
+  </div>
+</div>
 {% endblock %}
