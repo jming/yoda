@@ -1,4 +1,4 @@
-$(function(){
+$(function () {
 
 	var i = Number(localStorage.getItem('task-counter')) + 1;
 	//var i = 1;
