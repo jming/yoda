@@ -6,6 +6,7 @@ $(function () {
 	var $task = $("#taskName");
 	var $concernList = $("#concernList");
 	var order = [];
+	var color = {}
 	orderList = localStorage.getItem('task-orders');
 	
 	if(!orderList){
@@ -15,9 +16,15 @@ $(function () {
 	// Load todo list
 	orderList = orderList ? orderList.split(',') : [];   
 	for( j = 0, k = orderList.length; j < k; j++) {
+		var urgency = localStorage.getItem("task-" + orderList[j] + "-urgency");
+		var color = "99ff99"
+		if (urgency == "Medium")
+			color = "ffff99";
+		else if (urgency == "High")
+			color = "ff9999";
 		$concernList.append(
 			"<li id='" + orderList[j] + "'>"
-			+ "<a href='#TaskDetails' onclick='set_details("+orderList[j]+")'>" 
+			+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+orderList[j]+")'>" 
 			+ localStorage.getItem("task-" + orderList[j]) + "</a>" 
 			+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
 			+ "</li>"
@@ -39,9 +46,15 @@ $(function () {
 			localStorage.setItem("task-"+i+"-date", currentdate);
 			localStorage.setItem("task-counter",i);
 			$("#noErrors").css("display","none");
+			var urgency = localStorage.getItem("task-" + i + "-urgency");
+			var color = "99ff99"
+			if (urgency == "Medium")
+				color = "ffff99";
+			else if (urgency == "High")
+				color = "ff9999";
 			$concernList.append(
 				"<li id='" + i + "'>"
-				+ "<a href='#TaskDetails' onclick='set_details("+i+")'>" + localStorage.getItem("task-"+i) + "</a>" 
+				+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+i+")'>" + localStorage.getItem("task-"+i) + "</a>" 
 				+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
 				+ "</li>"
 			);

@@ -33,20 +33,61 @@
             font-family:"Lato";
             font-weight:400;
         }
+        .ui-grid-a.info {
+            height:200px;
+        }
+        .ui-grid-a.info 
+        .ui-block-a {
+            width:35%;
+        }
+        .ui-grid-a.info 
+        .ui-block-b {
+            width:65%;
+        }
+        .info-picture {
+            height:120px;
+            width:90px;
+        }
     </style>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 </head> 
 <body> 
 
 
-<div data-role="page" id="LandingPage">
+<div data-role="page" id="LandingPage" data-theme="a">
     <div data-role="header" data-theme="a">
-        <h1>YODA</h1>
+        <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
+        <h1>Welcome to YODA</h1>
     </div>
-    <div data-role="content" data-theme="a">
-        <h2> Welcome to YODA, <br /> Your Organizer for Doctor Appointments</h2> 
-        <a href="#TaskView" data-role="button" data-inline="true" class="role-button" style="width:47.5%">Parent </a>
-        <a href="#TaskView" data-role="button" data-inline="true" class="role-button" style="width:47.5%">Doctor </a>
+    <div data-role="content">
+        <div id="patient-information">
+            <div class="ui-grid-a info">
+                <div class="ui-block-a">
+                    <div class="ui-bar ui-bar-e">
+                        <img class="patient-picture" src="assets/filler.png" />
+                    </div>
+                </div>
+                <div class="ui-block-b">
+                    <div class="ui-bar ui-bar-e">
+                        <form>
+                            <div data-role="fieldcontain">
+                                <label for="info-name">Name:</label>
+                                <input type="text" name="info-name" id="info-name" disabled />
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label for="info-age">Age:</label>
+                                <input type="text" name="info-age" id="info-age" disabled />
+                            </div>
+<!--                             <div data-role="fieldcontain">
+                                <label for="info-update">Last updated:</label>
+                                <input type="text" name="info-update" id="info-update" disabled />
+                            </div> -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#AddTasks" data-role="button" class="ui-btn" data-icon="plus">Add concern</a>
     </div>
 </div>
 
@@ -97,11 +138,11 @@
                         <fieldset data-role="controlgroup" data-type="horizontal" data-theme="a">
                             <legend data-theme="a">Urgency:</legend>
                                 <input type="radio" name="urgency-choice" id="High" value="on" checked="checked" data-theme="a" data-corners="false"/>
-                                <label for="High" data-theme="a">High</label>
+                                <label for="High" data-theme="a" style="background-color: #ff9999;">High</label>
                                 <input type="radio" name="urgency-choice" id="Medium" value="off" data-theme="a"/>
-                                <label for="Medium" data-theme="a">Medium</label>
-                                <input type="radio" name="urgency-choice" id="Low" value="other" data-theme="a"/>
-                                <label for="Low" data-theme="a">Low</label>
+                                <label for="Medium" data-theme="a" style="background-color: #ffff99;">Medium</label>
+                                <input type="radio" name="urgency-choice" id="Low" value="other" data-theme="a" />
+                                <label for="Low" data-theme="a" style="background-color: #99ff99;">Low</label>
                         </fieldset>
                     </div>
                     <input type="button" value="Add Concern" id="addTask" class="ui-btn" style="width:100%"/>
