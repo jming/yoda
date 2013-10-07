@@ -46,8 +46,9 @@
             width:65%;
         }
         .info-picture {
-            height:120px;
-            width:90px;
+            height:auto;
+            width:auto;
+            max-height:200px;
         }
     </style>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
@@ -82,10 +83,11 @@
     </div>
     <div data-role="content">
         <div id="patient-information">
+            <h3>Patient Information</h3>
             <div class="ui-grid-a info">
                 <div class="ui-block-a">
                     <div class="ui-bar">
-                        <img class="patient-picture" src="assets/filler.png" />
+                        <img class="info-picture" src="assets/LunaLovegood.jpg" />
                     </div>
                 </div>
                 <div class="ui-block-b">
@@ -115,9 +117,9 @@
 
 <div data-role="page" id="TaskView" data-add-back-btn="true">
     <div data-role="header" data-theme="a">
-        <a href="#LandingPage" data-role="button" data-icon="home" class="ui-btn-left ui-btn">Home</a>
-        <h1>Concerns List</h1>
-        <a href="#TaskView" data-role="button" data-icon="home" class="ui-btn" id="switchView">Switch view</a>
+        <a href="#LandingPage" data-role="button" data-icon="home">Home</a>
+        <h1 id="concerns-list-header">Patient View</h1>
+        <a href="#TaskView" data-role="button" data-icon="home" class="ui-btn" id="switchView">Doctor View</a>
     </div>
     <div data-role="content">
         <div id="doctor-information">
@@ -125,16 +127,16 @@
             <form>
                 <div data-role="fieldcontain">
                     <select id="doctor-select">
-                        <option value="Dr. Potter">Dr. Potter</option>
-                        <option value="Dr. Weasley">Dr. Weasley</option>
-                        <option value="Dr.Granger">Dr.Granger</option>
+                        <option value="Dr. Potter">Dr. Harry Potter</option>
+                        <option value="Dr. Weasley">Dr. Ronald Weasley</option>
+                        <option value="Dr.Granger">Dr. Hermione Granger</option>
                     </select>
                 </div>
             </form>
             <div class="ui-grid-a info">
                 <div class="ui-block-a">
                     <div class="ui-bar">
-                        <img class="patient-picture" src="assets/filler.png" />
+                        <img id="info-doctor-picture" class="info-picture" src="assets/HarryPotter.jpg" />
                     </div>
                 </div>
                 <div class="ui-block-b">
@@ -160,7 +162,7 @@
         <div id="concerns-list">
             <h3>Patient Concern List</h3>
             <a href="#AddTasks" data-role="button" class="add-concern-button" data-icon="plus" style="background:#D14836;color:white;">Add concern</a>
-            <ul data-role="listview" data-inset="true" id="concernList">
+            <ul data-role="listview" data-inset="true" id="concernList" class="patient-view">
                 <p id="noErrors" style="display:none;">You currently have no concerns stored.</p>
             </ul>
         </div>
@@ -171,7 +173,7 @@
 <div data-role="page" id="AddTasks" data-add-back-btn="true">
     
     <div data-role="header" data-theme="a">
-    <a href="#LandingPage" data-role="button" data-icon="home" class="ui-btn-left ui-btn">Home</a>
+    <a href="#LandingPage" data-role="button" data-icon="home">Home</a>
     <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
         <h1>Add New Concern</h1>
     </div>
@@ -193,13 +195,13 @@
                     <div data-role="fieldcontain">
                         <label for="pending-for" class="select">Pending for:</label>
                         <select name="pending-for" id="pending-for">
-                            <option value="Potter">Dr. Potter</option>
-                            <option value="Weasley">Dr. Weasley</option>
-                            <option value="Granger">Dr. Granger</option>
+                            <option value="Potter">Dr. Harry Potter</option>
+                            <option value="Weasley">Dr. Ronald Weasley</option>
+                            <option value="Granger">Dr. Hermione Granger</option>
                         </select>
                     </div>
                     <div data-role="fieldcontain">
-                        <fieldset data-role="controlgroup" data-type="horizontal" data-theme="a">
+                        <fieldset data-role="controlgroup" data-theme="a">
                             <legend data-theme="a">Urgency:</legend>
                                 <input type="radio" name="urgency-choice" id="High" value="on" checked="checked" data-theme="a" data-corners="false"/>
                                 <label for="High" data-theme="a" style="background-color: #ff9999;">High</label>
@@ -209,7 +211,7 @@
                                 <label for="Low" data-theme="a" style="background-color: #99ff99;">Low</label>
                         </fieldset>
                     </div>
-                    <a href="#AddTasks" data-role="button" class="add-concern-button" data-icon="plus" style="background:#D14836;color:white;">Add concern</a>
+                    <input type="button" value="Add Concern" id="addConcern" class="ui-btn" style="background:#D14836;color:white;width:100%;" data-icon="plus" />
                 </form>    
             </div>
         </div>
@@ -218,7 +220,7 @@
 <div data-role="page" id="TaskDetails" data-add-back-btn="true">
 
     <div data-role="header" data-theme="a">
-    <a href="#LandingPage" data-role="button" data-icon="home" class="ui-btn-left ui-btn">Home</a>
+    <a href="#LandingPage" data-role="button" data-icon="home">Home</a>
     <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
         <h1>Concern Details</h1>
     </div>

@@ -60,7 +60,7 @@ $(function () {
 	}
 
 	// Add Task 
-	$(document).on("tap", "#addTask", function() {
+	$(document).on("tap", "#addConcern", function() {
 		if($task.val() != ""){
 			localStorage.setItem("task-"+i, $task.val());
 			localStorage.setItem("task-"+i+"-raised-by", $("#raised-by").val());
@@ -98,7 +98,7 @@ $(function () {
 	});	
 
 	// Remove Task
-	$(document).on("tap", "#concernList li a.close", function() {
+	$(document).on("tap", "#concernList.patient-view li a.close", function() {
 		//alert($(this).parent().attr("id"));
 		localStorage.removeItem($(this).parent().attr("id"));
 		 $(this).parent().slideUp('normal', function(){
@@ -109,6 +109,15 @@ $(function () {
 		return false;
 	});
 
+	// Disable Task during visit
+	$(document).on("tap", "#concernList.doctor-view li a.close", function() {
+		//alert($(this).parent().attr("id"));
+		$(this).parent().addClass('ui-disabled');
+		 	
+		return false;
+	});
+
+	// create new list based on ordering on the UI
 	function listTasks(){
 		var $taskLi = $("#concernList li");
 		order.length = 0;
@@ -125,16 +134,34 @@ $(function () {
 	$('#doctor-select').change(function () {
 		var selected = $("#doctor-select option:selected").text();
 		$("#info-doctor-name").val(selected);
-
+		$('#info-doctor-picture')[0].src = 
+			"assets/" + selected.replace('Dr. ', '').replace(' ','') + '.jpg'
+		// TODO: Fill in correct information
 		// TODO: Change the tasks listed
-		
 		return false
 	});
 
 	// Switch view by removing Doctor Information panel
 	$(document).on("tap", "#switchView", function() {
-		$('#doctor-information').toggle();
-		$(this).removeClass("ui-btn-active");
+		if ($('#doctor-information').is(':visible')) {
+			
+			// in the Doctor View
+			$('#doctor-information').hide();
+			$(this).removeClass('ui-btn-active');
+			$('#concerns-list-header')[0].innerHTML = "Doctor View";
+			$('#switchView')[0].innerHTML = "Patient View";
+			$('#concernList').addClass('doctor-view').removeClass('patient-view');
+
+		} else {
+
+			// in the Patient View
+			$('#doctor-information').show();
+			$(this).removeClass('ui-btn-active');
+			$('#concerns-list-header')[0].innerHTML = "Patient View";
+			$('#switchView')[0].innerHTML = "Doctor View";
+			$('#concernList').removeClass('doctor-view').addClass('patient-view');
+
+		}
 		// TODO: change the header for the patient
 		// TODO: allow doctor to "check off" different tasks
 	});	
