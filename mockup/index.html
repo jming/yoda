@@ -35,6 +35,7 @@
         }
         .ui-grid-a.info {
             height:200px;
+            
         }
         .ui-grid-a.info 
         .ui-block-a {
@@ -53,8 +54,27 @@
 </head> 
 <body> 
 
+<div data-role="page" id="LoginPage">
+    <div data-role="header" data-theme="a">
+        <h1>Login to YODA</h1>
+    </div>
+    <div data-role="content">
+        <form>
+            <div data-role="fieldcontain">
+                <label for="login-user">Username:</label>
+                <input type="text" name="login-user" id="login-user"/>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="login-password">Password:</label>
+                <input type="text" name="login-password" id="login-password"/>
+            </div>
+            <input type="button" value="Login" id="loginButton" class="ui-btn" style="width:100%"/>
+        </form>
+    </div>
+</div>
 
-<div data-role="page" id="LandingPage" data-theme="a">
+
+<div data-role="page" id="LandingPage">
     <div data-role="header" data-theme="a">
         <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
         <h1>Welcome to YODA</h1>
@@ -63,26 +83,25 @@
         <div id="patient-information">
             <div class="ui-grid-a info">
                 <div class="ui-block-a">
-                    <div class="ui-bar ui-bar-e">
+                    <div class="ui-bar">
                         <img class="patient-picture" src="assets/filler.png" />
                     </div>
                 </div>
                 <div class="ui-block-b">
-                    <div class="ui-bar ui-bar-e">
+                    <div class="ui-bar">
                         <form>
                             <div data-role="fieldcontain">
                                 <label for="info-name">Name:</label>
-                                <input type="text" name="info-name" id="info-name" disabled />
+                                <input type="text" name="info-name" id="info-name" disabled value="Luna Lovegood"/>
                             </div>
                             <div data-role="fieldcontain">
                                 <label for="info-age">Age:</label>
-                                <input type="text" name="info-age" id="info-age" disabled />
+                                <input type="text" name="info-age" id="info-age" disabled value="18"/>
                             </div>
-                            <br> 
-<!--                             <div data-role="fieldcontain">
-                                <label for="info-update">Last updated:</label>
-                                <input type="text" name="info-update" id="info-update" disabled />
-                            </div> -->
+                            <div data-role="fieldcontain">
+                                <label for="info-update">Updated:</label>
+                                <input type="text" name="info-update" id="info-update" disabled value="Monday, October 7, 2013 10AM" />
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -97,12 +116,53 @@
     <div data-role="header" data-theme="a">
         <a href="#LandingPage" data-role="button" data-icon="home" class="ui-btn-left ui-btn">Home</a>
         <h1>Concerns List</h1>
+        <a href="#TaskView" data-role="button" data-icon="home" class="ui-btn" id="switchView">Switch view</a>
     </div>
     <div data-role="content">
-        <a href="#AddTasks" data-role="button" class="ui-btn" data-icon="plus">Add concern</a>
-        <ul data-role="listview" data-inset="true" id="concernList">
-            <p id="noErrors" style="display:none;">You currently have no concerns stored.</p>
-        </ul>
+        <div id="doctor-information">
+        <h3>Doctor Information</h3>
+            <form>
+                <div data-role="fieldcontain">
+                    <select>
+                        <option value="Dr. Potter">Dr. Potter</option>
+                        <option value="Dr. Weasley">Dr. Weasley</option>
+                        <option value="Dr.Granger">Dr.Granger</option>
+                    </select>
+                </div>
+            </form>
+            <div class="ui-grid-a info">
+                <div class="ui-block-a">
+                    <div class="ui-bar">
+                        <img class="patient-picture" src="assets/filler.png" />
+                    </div>
+                </div>
+                <div class="ui-block-b">
+                    <div class="ui-bar">
+                        <form>
+                            <div data-role="fieldcontain">
+                                <label for="info-name">Doctor:</label>
+                                <input type="text" name="info-doctor-name" id="info-name" disabled value="Dr. Harry Potter"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label for="info-age">Specialty:</label>
+                                <input type="text" name="info-age" id="info-specialty" disabled value="Dermatologist"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label for="info-update">Next visit:</label>
+                                <input type="text" name="info-visit" id="info-visit" disabled value="Monday, October 7, 2013 10AM" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="concerns-list">
+            <h3>Patient Concern List</h3>
+            <a href="#AddTasks" data-role="button" class="ui-btn" data-icon="plus">Add concern</a>
+            <ul data-role="listview" data-inset="true" id="concernList">
+                <p id="noErrors" style="display:none;">You currently have no concerns stored.</p>
+            </ul>
+        </div>
     </div>
 </div>
 

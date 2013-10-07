@@ -1,5 +1,12 @@
 $(function () {
 
+	// Login logic
+	$(document).on("tap", "#loginButton", function () {
+		// TODO: Store session information
+		// TODO: Check credentials
+		$.mobile.changePage("#LandingPage");
+	});
+
 	var i = Number(localStorage.getItem('task-counter')) + 1;
 	//var i = 1;
 	var j, k, orderList;
@@ -91,7 +98,18 @@ $(function () {
 		});
 		$('ul').listview('refresh');
 		localStorage.setItem("task-orders", order.join(","));	
-	}	
+	}
+
+	// Switch view by removing Doctor Information panel
+	$(document).on("tap", "#switchView", function() {
+		$('#doctor-information').toggle();
+		$(this).removeClass("ui-btn-active");
+		// TODO: change the header for the patient
+		// TODO: allow doctor to "check off" different tasks
+	});	
+
+	// TODO: Fill in patient-information based on login/session
+	// TODO: Fill in doctor-information based on selected doctor on top of page
 
 });
 
