@@ -11,11 +11,13 @@
     <link rel="stylesheet" href="css/themes/custom-theme.css" />
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
     <style type="text/css">
+    
         .ui-header .ui-title,
         .ui-footer .ui-title {
             font-weight:300;
             font-size:24px;
         }
+
         *, 
         body,
         input,
@@ -33,18 +35,27 @@
             font-family:"Lato";
             font-weight:400;
         }
-        .ui-grid-a.info {
-            height:200px;
-            
+
+        @media all and (max-width:30em) {
+            .info-breakpoint .ui-block-a, 
+            .info-breakpoint .ui-block-b, 
+            .info-breakpoint .ui-block-c,
+            .info-breakpoint .ui-block-d,
+            .info-breakpoint .ui-block-e { 
+                width: 100%; 
+                float:none; 
+            }
         }
-        .ui-grid-a.info 
-        .ui-block-a {
-            width:35%;
+
+        @media all and (min-width: 31em) {
+            .info-breakpoint.ui-grid-a .ui-block-a { 
+                width:35%; 
+            }
+            .info-breakpoint.ui-grid-a .ui-block-b {
+                width:65%;
+            }
         }
-        .ui-grid-a.info 
-        .ui-block-b {
-            width:65%;
-        }
+
         .info-picture {
             height:auto;
             width:auto;
@@ -57,7 +68,7 @@
 
 <div data-role="page" id="LoginPage">
     <div data-role="header" data-theme="a">
-        <h1>Login to YODA</h1>
+        <h1>Login</h1>
     </div>
     <div data-role="content">
         <form>
@@ -67,7 +78,7 @@
             </div>
             <div data-role="fieldcontain">
                 <label for="login-password">Password:</label>
-                <input type="text" name="login-password" id="login-password"/>
+                <input type="password" name="login-password" id="login-password"/>
             </div>
             <input type="button" value="Login" id="loginButton" class="ui-btn" style="width:100%"/>
         </form>
@@ -78,13 +89,13 @@
 <div data-role="page" id="LandingPage">
     <div data-role="header" data-theme="a">
         <a href="#LoginPage" data-role="button" class="ui-btn">Logout</a>
-        <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
-        <h1>Welcome to YODA</h1>
+        <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns</a>
+        <h1>YODA</h1>
     </div>
     <div data-role="content">
         <div id="patient-information">
             <h3>Patient Information</h3>
-            <div class="ui-grid-a info">
+            <div class="ui-grid-a info-breakpoint">
                 <div class="ui-block-a">
                     <div class="ui-bar">
                         <img class="info-picture" src="assets/LunaLovegood.jpg" />
@@ -118,10 +129,11 @@
 <div data-role="page" id="TaskView" data-add-back-btn="true">
     <div data-role="header" data-theme="a">
         <a href="#LandingPage" data-role="button" data-icon="home">Home</a>
-        <h1 id="concerns-list-header">Patient View</h1>
+        <h1>Concerns</h1>
         <a href="#TaskView" data-role="button" data-icon="home" class="ui-btn" id="switchView">Doctor View</a>
     </div>
     <div data-role="content">
+        <h2 id="concerns-list-header">Patient View</h2>
         <div id="doctor-information">
         <h3>Doctor Information</h3>
             <form>
@@ -133,7 +145,7 @@
                     </select>
                 </div>
             </form>
-            <div class="ui-grid-a info">
+            <div class="ui-grid-a info-breakpoint">
                 <div class="ui-block-a">
                     <div class="ui-bar">
                         <img id="info-doctor-picture" class="info-picture" src="assets/HarryPotter.jpg" />
@@ -174,7 +186,7 @@
     
     <div data-role="header" data-theme="a">
     <a href="#LandingPage" data-role="button" data-icon="home">Home</a>
-    <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
+    <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns</a>
         <h1>Add New Concern</h1>
     </div>
         <div data-role="content">
@@ -221,7 +233,7 @@
 
     <div data-role="header" data-theme="a">
     <a href="#LandingPage" data-role="button" data-icon="home">Home</a>
-    <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
+    <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns</a>
         <h1>Concern Details</h1>
     </div>
     <div data-role="content">
