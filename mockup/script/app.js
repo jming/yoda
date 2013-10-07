@@ -1,3 +1,24 @@
+// set up database
+var db = openDatabase("Test", "1.0", "Test", 65535);
+
+db.transaction (function (transaction) {
+	var sql = "CREATE TABLE IF NOT EXISTS users "
+		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
+		+ "username VARCHAR(100) NOT NULL, "
+		+ "password VARCHAR(100) NOT NULL)"
+	transaction.executeSql(
+		sql, 
+		undefined, 
+		function () {
+			// alert("Table created!");
+		}, 
+		function (transaction, err) {
+			// alert("Table not created because " + err.message);
+		}
+	);
+});
+
+// application level logic
 $(function () {
 
 	// Login logic
@@ -99,6 +120,16 @@ $(function () {
 		$('ul').listview('refresh');
 		localStorage.setItem("task-orders", order.join(","));	
 	}
+
+	// Change doctor information based on selection
+	$('#doctor-select').change(function () {
+		var selected = $("#doctor-select option:selected").text();
+		$("#info-doctor-name").val(selected);
+
+		// TODO: Change the tasks listed
+		
+		return false
+	});
 
 	// Switch view by removing Doctor Information panel
 	$(document).on("tap", "#switchView", function() {

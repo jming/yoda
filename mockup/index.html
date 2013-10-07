@@ -76,6 +76,7 @@
 
 <div data-role="page" id="LandingPage">
     <div data-role="header" data-theme="a">
+        <a href="#LoginPage" data-role="button" class="ui-btn">Logout</a>
         <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns List</a>
         <h1>Welcome to YODA</h1>
     </div>
@@ -123,7 +124,7 @@
         <h3>Doctor Information</h3>
             <form>
                 <div data-role="fieldcontain">
-                    <select>
+                    <select id="doctor-select">
                         <option value="Dr. Potter">Dr. Potter</option>
                         <option value="Dr. Weasley">Dr. Weasley</option>
                         <option value="Dr.Granger">Dr.Granger</option>
@@ -140,8 +141,8 @@
                     <div class="ui-bar">
                         <form>
                             <div data-role="fieldcontain">
-                                <label for="info-name">Doctor:</label>
-                                <input type="text" name="info-doctor-name" id="info-name" disabled value="Dr. Harry Potter"/>
+                                <label for="info-doctor-name">Doctor:</label>
+                                <input type="text" name="info-doctor-name" id="info-doctor-name" disabled value="Dr. Harry Potter"/>
                             </div>
                             <div data-role="fieldcontain">
                                 <label for="info-age">Specialty:</label>
