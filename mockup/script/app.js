@@ -1,19 +1,29 @@
 // set up database
 var db = openDatabase("Test", "1.0", "Test", 65535);
 
+// TODO: figure out if this will just open the users table
 db.transaction (function (transaction) {
-	var sql = "CREATE TABLE IF NOT EXISTS users "
+	// var sql = "CREATE TABLE IF NOT EXISTS users "
+	// 	+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
+	// 	+ "username VARCHAR(100) NOT NULL, "
+	// 	+ "password VARCHAR(100) NOT NULL)"
+	var sql = "CREATE TABLE IF NOT EXISTS concerns "
 		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
-		+ "username VARCHAR(100) NOT NULL, "
-		+ "password VARCHAR(100) NOT NULL)"
+		+ "concernName VARCHAR(100) NOT NULL, "
+		+ "date DATETIME NOT NULL, " 
+		+ "raisedBy VARCHAR(100) NOT NULL, "
+		+ "pendingFor VARCHAR(100) NOT NULL, "
+		+ "urgency VARCHAR(100) NOT NULL) "
+		// + "taskOrder INTEGER NOT NULL)"
+	// var sql = "DROP TABLE concerns";
 	transaction.executeSql(
 		sql, 
 		undefined, 
 		function () {
-			// alert("Table created!");
+			alert("Table created!");
 		}, 
 		function (transaction, err) {
-			// alert("Table not created because " + err.message);
+			alert("Table not created because " + err.message);
 		}
 	);
 });
@@ -28,74 +38,146 @@ $(function () {
 		$.mobile.changePage("#LandingPage");
 	});
 
-	var i = Number(localStorage.getItem('task-counter')) + 1;
-	//var i = 1;
-	var j, k, orderList;
-	var $task = $("#taskName");
+	// var i = Number(localStorage.getItem('task-counter')) + 1;
+	// //var i = 1;
+	// var j, k, orderList;
+	var $concern = $("#taskName");
 	var $concernList = $("#concernList");
-	var order = [];
-	var color = {}
-	orderList = localStorage.getItem('task-orders');
+	// var order = [];
+	// var color = {}
+	// orderList = localStorage.getItem('task-orders');
 	
-	if(!orderList){
-		$("#noErrors").css("display","block");
-	}
-	
-	// Load todo list
-	orderList = orderList ? orderList.split(',') : [];   
-	for( j = 0, k = orderList.length; j < k; j++) {
-		var urgency = localStorage.getItem("task-" + orderList[j] + "-urgency");
-		var color = "99ff99"
-		if (urgency == "Medium")
-			color = "ffff99";
-		else if (urgency == "High")
-			color = "ff9999";
-		$concernList.append(
-			"<li id='" + orderList[j] + "'>"
-			+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+orderList[j]+")'>" 
-			+ localStorage.getItem("task-" + orderList[j]) + "</a>" 
-			+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
-			+ "</li>"
-		);
-	}
+	// if(!orderList){
+	// 	$("#noErrors").css("display","block");
+	// }
 
-	// Add Task 
+	// TODO: get information in table
+	db.transaction( function(transaction) {
+		// TODO: get order
+		var sql = "SELECT * FROM concerns";
+		transaction.executeSql(
+			sql, 
+			undefined, 
+			function(transaction, result) {
+				if (result.rows.length) {
+					for (var i = 0; i < result.rows.length; i++) {
+						var row = result.rows.item(i);
+						var color = "#99ff99";
+						if (row.urgency == "Medium")
+							color = "#ffff99";
+						else if (row.urgency == "High")
+							color = "#ff9999";
+						$concernList.append(
+							"<li id='" + row.id + "'>"
+							+ "<a style='background-color: " + color + ";' href='#TaskDetails' onclick='set_details(" + row.id + ")'>"
+							+ row.concernName + "</a>"
+							+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
+							+ "</li>"
+						);
+					}
+				}
+			}, 
+			function (transaction, err) {
+				alert("Oops the error is: " + err.message);
+			}
+		);
+	});
+	
+	// // Load todo list
+	// orderList = orderList ? orderList.split(',') : [];   
+	// for( j = 0, k = orderList.length; j < k; j++) {
+	// 	var urgency = localStorage.getItem("task-" + orderList[j] + "-urgency");
+	// 	var color = "99ff99"
+	// 	if (urgency == "Medium")
+	// 		color = "ffff99";
+	// 	else if (urgency == "High")
+	// 		color = "ff9999";
+	// 	$concernList.append(
+	// 		"<li id='" + orderList[j] + "'>"
+	// 		+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+orderList[j]+")'>" 
+	// 		+ localStorage.getItem("task-" + orderList[j]) + "</a>" 
+	// 		+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
+	// 		+ "</li>"
+	// 	);
+	// }
+
 	$(document).on("tap", "#addConcern", function() {
-		if($task.val() != ""){
-			localStorage.setItem("task-"+i, $task.val());
-			localStorage.setItem("task-"+i+"-raised-by", $("#raised-by").val());
-			localStorage.setItem("task-"+i+"-pending-for", $("#pending-for").val());
-			urgency = document.getElementsByName("urgency-choice");
+		var $concern = $("#taskName");
+		// alert("Tapped! +" $("#taskName").val());
+		if ($concern.val()	!= "") {
+			// alert("derp");
+			var urgency = "High";
+			var urgency_list = document.getElementsByName("urgency-choice");
 			for (index =0; index < urgency.length; index++) {
 				if (urgency[index].checked)
-					localStorage.setItem("task-"+i+"-urgency", urgency[index].id);
+					urgency = urgency[index].id;
 			}
-			var currentdate = new Date();
-			localStorage.setItem("task-"+i+"-date", currentdate);
-			localStorage.setItem("task-counter",i);
-			$("#noErrors").css("display","none");
-			var urgency = localStorage.getItem("task-" + i + "-urgency");
-			var color = "99ff99"
-			if (urgency == "Medium")
-				color = "ffff99";
-			else if (urgency == "High")
-				color = "ff9999";
-			$concernList.append(
-				"<li id='" + i + "'>"
-				+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+i+")'>" + localStorage.getItem("task-"+i) + "</a>" 
-				+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
-				+ "</li>"
-			);
+			db.transaction(function (transaction) {
+				var sql = "INSERT INTO concerns (concernName, date, raisedBy, pendingFor, urgency) VALUES (?, ?, ?, ?, ?)";
+				transaction.executeSql(
+					sql, 
+					// [
+					// 	$concern.val(), 
+					// 	new Date(), 
+					// 	$('#raised-by').val(), 
+					// 	$('#pending-for').val(),
+					// 	urgency
+					// ], 
+					["a", new Date(), "c", "d", "e"], 
+					function () {
+						alert("Concern inserted!");
+					},
+					function (transaction, error) {
+						alert("Oops the error is: " + error.message);
+					}
+				);
+			});	
 			$.mobile.changePage("#TaskView");		
-			listTasks();
-			$task.val("");
-			
-			i++
-		} else {
+			// listTasks();
+			$concern.val("");
+		}
+		else {
 			alert("Please enter a concern");
 		}
-		return false;
-	});	
+	});
+
+	// Add Task 
+	// $(document).on("tap", "#addConcern", function() {
+	// 	if($task.val() != ""){
+	// 		localStorage.setItem("task-"+i, $task.val());
+	// 		localStorage.setItem("task-"+i+"-raised-by", $("#raised-by").val());
+	// 		localStorage.setItem("task-"+i+"-pending-for", $("#pending-for").val());
+	// 		urgency = document.getElementsByName("urgency-choice");
+	// 		for (index =0; index < urgency.length; index++) {
+	// 			if (urgency[index].checked)
+	// 				localStorage.setItem("task-"+i+"-urgency", urgency[index].id);
+	// 		}
+	// 		var currentdate = new Date();
+	// 		localStorage.setItem("task-"+i+"-date", currentdate);
+	// 		localStorage.setItem("task-counter",i);
+	// 		$("#noErrors").css("display","none");
+	// 		var urgency = localStorage.getItem("task-" + i + "-urgency");
+	// 		var color = "99ff99"
+	// 		if (urgency == "Medium")
+	// 			color = "ffff99";
+	// 		else if (urgency == "High")
+	// 			color = "ff9999";
+	// 		$concernList.append(
+	// 			"<li id='" + i + "'>"
+	// 			+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+i+")'>" + localStorage.getItem("task-"+i) + "</a>" 
+	// 			+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
+	// 			+ "</li>"
+	// 		);
+	// 		$.mobile.changePage("#TaskView");		
+	// 		listTasks();
+	// 		$task.val("");
+			
+	// 		i++
+	// 	} else {
+	// 		alert("Please enter a concern");
+	// 	}
+	// 	return false;
+	// });	
 
 	// Remove Task
 	$(document).on("tap", "#concernList.patient-view li a.close", function() {
