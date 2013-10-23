@@ -62,15 +62,14 @@ $(function () {
 				if (result.rows.length) {
 					for (var i = 0; i < result.rows.length; i++) {
 						var row = result.rows.item(i);
-						var color = "#99ff99";
+						var color = "99ff99";
 						if (row.urgency == "Medium")
-							color = "#ffff99";
+							color = "ffff99";
 						else if (row.urgency == "High")
-							color = "#ff9999";
+							color = "ff9999";
 						$concernList.append(
 							"<li id='" + row.id + "'>"
-							+ "<a style='background-color: " + color + ";' href='#TaskDetails' onclick='set_details(" + row.id + ")'>"
-							+ row.concernName + "</a>"
+							+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+row.id+")'>" + row.concernName + "</a>" 
 							+ "<a href='#' data-icon='delete' class='close'>Delete</a>"
 							+ "</li>"
 						);
@@ -154,6 +153,7 @@ $(function () {
 		return false;
 	});
 
+	// TODO: Figure out how to fix this
 	// create new list based on ordering on the UI
 	function listTasks(){
 		var $taskLi = $("#concernList li");
@@ -227,9 +227,24 @@ $(document).bind('pageinit', function() {
 });
 
 function set_details(id) {
-    $("#detail-concern")[0].value = localStorage.getItem("task-"+id);
-    $("#detail-raised-by")[0].value = localStorage.getItem("task-"+id+"-raised-by");
-    $('#detail-pending-for')[0].value = localStorage.getItem("task-"+id+"-pending-for");
-    $('#detail-urgency')[0].value = localStorage.getItem("task-"+id+"-urgency");
-    $('#detail-date')[0].value = localStorage.getItem("task-"+id+"-date");
+	// alert("set_details: " + id);
+	db.transaction(function (transaction) {
+		var sql = "SELECT * FROM concerns WHERE id=" + id;
+		// alert(sql);
+		transaction.executeSql(
+			sql,
+			undefined,
+			function (transaction, result) {
+				var item = result.rows.item(0);
+				$("#detail-concern")[0].value = item.concernName;
+			    $("#detail-raised-by")[0].value = item.raisedBy;
+			    $('#detail-pending-for')[0].value = item.pendingFor;
+			    $('#detail-urgency')[0].value = item.urgency;
+			    $('#detail-date')[0].value = item.date;
+			},
+			function (transaction, error) {
+				alert("error: " + error.message);
+			}
+		);
+	})
 }
