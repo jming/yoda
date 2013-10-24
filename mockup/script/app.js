@@ -42,11 +42,9 @@ $(function () {
 			sql, 
 			undefined, 
 			function(transaction, result) {
-				console.log(result);
 				if (result.rows.length) {
 					for (var i = 0; i < result.rows.length; i++) {
 						var row = result.rows.item(i);
-						alert("order" + row.concernOrder);
 						if (row.concernOrder != -1) {
 							var color = "99ff99";
 							if (row.urgency == "Medium")
@@ -69,6 +67,7 @@ $(function () {
 		);
 	});
 
+	// Add concern
 	$(document).on("tap", "#addConcern", function() {
 		var $concern = $("#taskName").val();
 		var $i = 0;
@@ -127,7 +126,6 @@ $(function () {
 	// Remove Task
 	$(document).on("tap", "#concernList.patient-view li a.close", function() {
 		$i = $(this).parent().attr("id");
-		alert(""+ $i);
 		db.transaction(function (transaction) {
 			var sql = "UPDATE concerns SET concernOrder=-1 WHERE id=" + $i;
 			transaction.executeSql(
@@ -163,6 +161,36 @@ $(function () {
 			"assets/" + selected.replace('Dr. ', '').replace(' ','') + '.jpg'
 		// TODO: Fill in correct information
 		// TODO: Change the tasks listed
+		// db.transaction( function(transaction) {
+		// 	var sql = "SELECT * FROM concerns ORDER BY concernOrder";
+		// 	transaction.executeSql(
+		// 		sql, 
+		// 		undefined, 
+		// 		function(transaction, result) {
+		// 			if (result.rows.length) {
+		// 				for (var i = 0; i < result.rows.length; i++) {
+		// 					var row = result.rows.item(i);
+		// 					if (row.concernOrder != -1) {
+		// 						var color = "99ff99";
+		// 						if (row.urgency == "Medium")
+		// 							color = "ffff99";
+		// 						else if (row.urgency == "High")
+		// 							color = "ff9999";
+		// 						$concernList.append(
+		// 							"<li id='" + row.id + "' class='ui-li-has-alt'>"
+		// 							+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+row.id+")' class='ui-btn'>" + row.concernName + "</a>" 
+		// 							+ "<a href='#' data-icon='delete' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
+		// 							+ "</li>"
+		// 						);
+		// 					}
+		// 				}
+		// 			}
+		// 		}, 
+		// 		function (transaction, err) {
+		// 			alert("Oops the error is: " + err.message);
+		// 		}
+		// 	);
+		// });
 		return false
 	});
 
