@@ -17,13 +17,31 @@ db.transaction (function (transaction) {
 		function () {
 		}, 
 		function (transaction, err) {
-			alert("Table not created because " + err.message);
+			console.error(err);
+		}
+	);
+});
+
+db.transaction (function (transaction) {
+	var sql = "CREATE TABLE IF NOT EXISTS doctors "
+		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," 
+		+ "doctorName VARCHAR(100) NOT NULL, " 
+		+ "specialty VARCHAR(100) NOT NULL, "
+		+ "doctorImage VARCHAR(100) NOT NULL)"
+	transaction.executeSql(
+		sql,
+		undefined,
+		function () {},
+		function (transaction, err) {
+			console.error(err);
 		}
 	);
 });
 
 // application level logic
 $(function () {
+
+	var DEFAULT_DOCTOR = "Dr. Harry Potter";
 
 	// Login logic
 	$(document).on("tap", "#loginButton", function () {
@@ -35,37 +53,7 @@ $(function () {
 	var $concern = $("#taskName");
 	var $concernList = $("#concernList");
 
-	// TODO: get information in table
-	db.transaction( function(transaction) {
-		var sql = "SELECT * FROM concerns ORDER BY concernOrder";
-		transaction.executeSql(
-			sql, 
-			undefined, 
-			function(transaction, result) {
-				if (result.rows.length) {
-					for (var i = 0; i < result.rows.length; i++) {
-						var row = result.rows.item(i);
-						if (row.concernOrder != -1) {
-							var color = "99ff99";
-							if (row.urgency == "Medium")
-								color = "ffff99";
-							else if (row.urgency == "High")
-								color = "ff9999";
-							$concernList.append(
-								"<li id='" + row.id + "' class='ui-li-has-alt'>"
-								+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+row.id+")' class='ui-btn'>" + row.concernName + "</a>" 
-								+ "<a href='#' data-icon='delete' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
-								+ "</li>"
-							);
-						}
-					}
-				}
-			}, 
-			function (transaction, err) {
-				alert("Oops the error is: " + err.message);
-			}
-		);
-	});
+	display_concerns(DEFAULT_DOCTOR);
 
 	// Add concern
 	$(document).on("tap", "#addConcern", function() {
@@ -84,6 +72,7 @@ $(function () {
 					sql, 
 					[$concern, new Date(), $("#raised-by").val(), $("#pending-for").val(), urgency, 0], 
 					function (transaction, result) {
+						console.log([$concern, new Date(), $("#raised-by").val(), $("#pending-for").val(), urgency, 0]);
 						$("#noErrors").css("display","none");
 						$i = result.insertId;
 
@@ -97,23 +86,24 @@ $(function () {
 									alert("error: " + error.message);
 								}
 							);
-						})
-						var color = "#99ff99"
-						if (urgency == "Medium")
-							color = "ffff99";
-						else if (urgency == "High")
-							color = "ff9999";
-						$concernList.append(
-							"<li id='" + $i + "' class='ui-li-has-alt'>"
-							+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+$i+")' class='ui-btn'>" + $concern + "</a>" 
-							+ "<a href='#' data-icon='delete' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
-							+ "</li>"
-						);
+						});
+						display_concerns(DEFAULT_DOCTOR);
+						// var color = "#99ff99"
+						// if (urgency == "Medium")
+						// 	color = "ffff99";
+						// else if (urgency == "High")
+						// 	color = "ff9999";
+						// $concernList.append(
+						// 	"<li id='" + $i + "' class='ui-li-has-alt'>"
+						// 	+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+$i+")' class='ui-btn'>" + $concern + "</a>" 
+						// 	+ "<a href='#' data-icon='delete' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
+						// 	+ "</li>"
+						// );
 						$.mobile.changePage("#TaskView");		
 						$("#taskName").val("");
 					},
 					function (transaction, error) {
-						alert("Oops the error is: " + error.message);
+						console.error(error);
 					}
 				);
 			});
@@ -133,7 +123,7 @@ $(function () {
 				undefined,
 				function () {},
 				function (transaction, error) {
-					alert("error: " + error.message);
+					console.error(error);
 				}
 			);
 		});
@@ -161,36 +151,8 @@ $(function () {
 			"assets/" + selected.replace('Dr. ', '').replace(' ','') + '.jpg'
 		// TODO: Fill in correct information
 		// TODO: Change the tasks listed
-		// db.transaction( function(transaction) {
-		// 	var sql = "SELECT * FROM concerns ORDER BY concernOrder";
-		// 	transaction.executeSql(
-		// 		sql, 
-		// 		undefined, 
-		// 		function(transaction, result) {
-		// 			if (result.rows.length) {
-		// 				for (var i = 0; i < result.rows.length; i++) {
-		// 					var row = result.rows.item(i);
-		// 					if (row.concernOrder != -1) {
-		// 						var color = "99ff99";
-		// 						if (row.urgency == "Medium")
-		// 							color = "ffff99";
-		// 						else if (row.urgency == "High")
-		// 							color = "ff9999";
-		// 						$concernList.append(
-		// 							"<li id='" + row.id + "' class='ui-li-has-alt'>"
-		// 							+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+row.id+")' class='ui-btn'>" + row.concernName + "</a>" 
-		// 							+ "<a href='#' data-icon='delete' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
-		// 							+ "</li>"
-		// 						);
-		// 					}
-		// 				}
-		// 			}
-		// 		}, 
-		// 		function (transaction, err) {
-		// 			alert("Oops the error is: " + err.message);
-		// 		}
-		// 	);
-		// });
+		display_concerns(selected);
+
 		return false
 	});
 
@@ -242,7 +204,7 @@ $(document).bind('pageinit', function() {
 						console.log(result);
 					},
 					function (transaction, error) {
-						alert("error: " + error.message);
+						console.error(error);
 					}
 				);
 			}
@@ -267,8 +229,43 @@ function set_details(id) {
 			    $('#detail-date')[0].value = item.date;
 			},
 			function (transaction, error) {
-				alert("error: " + error.message);
+				console.error(error);
 			}
 		);
 	})
+}
+
+function display_concerns(doctor) {
+	$("#concernList").empty();
+	db.transaction( function(transaction) {
+		var sql = "SELECT * FROM concerns WHERE pendingFor='" + doctor + "' ORDER BY concernOrder";
+		transaction.executeSql(
+			sql, 
+			undefined, 
+			function (transaction, result) {
+				console.log(result.rows);
+				if (result.rows.length) {
+					for (var i = 0; i < result.rows.length; i++) {
+						var row = result.rows.item(i);
+						if (row.concernOrder != -1) {
+							var color = "99ff99";
+							if (row.urgency == "Medium")
+								color = "ffff99";
+							else if (row.urgency == "High")
+								color = "ff9999";
+							$("#concernList").append(
+								"<li id='" + row.id + "' class='ui-li-has-alt'>"
+								+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+row.id+")' class='ui-btn'>" + row.concernName + "</a>" 
+								+ "<a href='#' data-icon='delete' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
+								+ "</li>"
+							);
+						}
+					}
+				}
+			}, 
+			function (transaction, err) {
+				console.error(err);
+			}
+		);
+	});
 }
