@@ -91,7 +91,7 @@ $(document).on("tap", "#loginButton", function () {
 			sql,
 			undefined,
 			function (transaction, result) {
-				alert(result.rows.length);
+				// alert(result.rows.length);
 				console.log(result.rows);
 				if (result.rows.length != 0) {
 					var user = result.rows.item(1);
@@ -169,7 +169,7 @@ function load_landing_page() {
 								undefined, 
 								function () {}, 
 								function (transaction, error) {
-									alert("error: " + error.message);
+									console.error("error: " + error.message);
 								}
 							);
 						});
