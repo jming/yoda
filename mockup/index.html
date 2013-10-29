@@ -81,8 +81,50 @@
                 <input type="password" name="login-password" id="login-password"/>
             </div>
             <input type="button" value="Login" id="loginButton" class="ui-btn" style="width:100%"/>
+            <a href="#CreateAccount">Create an account</a>
         </form>
     </div>
+</div>
+
+<div data-role="page" id="CreateAccount">
+
+    <div data-role="header" data-theme="a">
+        <a href="#LoginPage" data-role="button" class="ui-btn">Logout</a>
+        <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Create an account</a>
+        <h1>YODA</h1>
+    </div>  
+    <div data-role="content">
+        <div class="form-area">
+            <form id="tasks-form"> 
+                <div data-role="fieldcontain">
+                    <label for="username"> Username: </label>
+                    <input type="text" name="username" id="username" value="" />
+                </div>  
+                <div data-role="fieldcontain">
+                    <label for="password"> Password: </label>
+                    <input type="password" name="password" id="password" value="" />
+                </div> 
+                <div data-role="fieldcontain">
+                    <label for="password2"> Retype Password: </label>
+                    <input type="password" name="password2" id="password2" value="" />
+                </div> 
+                <div data-role="fieldcontain">
+                    <label for="patientName"> Patient Name: </label>
+                    <input type="text" name="patientName" id="patientName" value="" />
+                </div> 
+                <div data-role="fieldcontain">
+                    <label for="patientAge"> Patient Age: </label>
+                    <input type="text" name="patientAge" id="patientAge" value="" />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="patientImage"> Patient Picture: </label>
+                    <input type="file" name="patientImage" id="patientImage" value="" />
+                </div>
+                <input type="button" value="Create Account" id="createAccount" class="ui-btn" style="background:#D14836;color:white;width:100%;" data-icon="plus" />
+            </form>
+        </div>
+    </div>
+
 </div>
 
 
@@ -98,7 +140,7 @@
             <div class="ui-grid-a info-breakpoint">
                 <div class="ui-block-a">
                     <div class="ui-bar">
-                        <img class="info-picture" src="assets/LunaLovegood.jpg" />
+                        <img class="info-picture" src="assets/filler.png" />
                     </div>
                 </div>
                 <div class="ui-block-b">
@@ -106,15 +148,15 @@
                         <form>
                             <div data-role="fieldcontain">
                                 <label for="info-name">Name:</label>
-                                <input type="text" name="info-name" id="info-name" disabled value="Luna Lovegood"/>
+                                <input type="text" name="info-name" id="info-name" disabled value=""/>
                             </div>
                             <div data-role="fieldcontain">
                                 <label for="info-age">Age:</label>
-                                <input type="text" name="info-age" id="info-age" disabled value="18"/>
+                                <input type="text" name="info-age" id="info-age" disabled value=""/>
                             </div>
                             <div data-role="fieldcontain">
                                 <label for="info-update">Updated:</label>
-                                <input type="text" name="info-update" id="info-update" disabled value="Monday, October 7, 2013 10AM" />
+                                <input type="text" name="info-update" id="info-update" disabled value="" />
                             </div>
                         </form>
                     </div>
@@ -139,16 +181,16 @@
             <form>
                 <div data-role="fieldcontain">
                     <select id="doctor-select">
-                        <option value="Dr. Harry Potter">Dr. Harry Potter</option>
-                        <option value="Dr. Ronald Weasley">Dr. Ronald Weasley</option>
-                        <option value="Dr. Hermione Granger">Dr. Hermione Granger</option>
+                        <option value="Doctor 1">Doctor 1</option>
+                        <option value="Doctor 2">Doctor 2</option>
+                        <option value="Doctor 3">Doctor 3</option>
                     </select>
                 </div>
             </form>
             <div class="ui-grid-a info-breakpoint">
                 <div class="ui-block-a">
                     <div class="ui-bar">
-                        <img id="info-doctor-picture" class="info-picture" src="assets/HarryPotter.jpg" />
+                        <img id="info-doctor-picture" class="info-picture" src="assets/filler.png" />
                     </div>
                 </div>
                 <div class="ui-block-b">
@@ -156,15 +198,15 @@
                         <form>
                             <div data-role="fieldcontain">
                                 <label for="info-doctor-name">Doctor:</label>
-                                <input type="text" name="info-doctor-name" id="info-doctor-name" disabled value="Dr. Harry Potter"/>
+                                <input type="text" name="info-doctor-name" id="info-doctor-name" disabled value="Doctor 1"/>
                             </div>
                             <div data-role="fieldcontain">
                                 <label for="info-age">Specialty:</label>
-                                <input type="text" name="info-age" id="info-specialty" disabled value="Dermatologist"/>
+                                <input type="text" name="info-age" id="info-specialty" disabled />
                             </div>
                             <div data-role="fieldcontain">
                                 <label for="info-update">Next visit:</label>
-                                <input type="text" name="info-visit" id="info-visit" disabled value="Monday, October 7, 2013 10AM" />
+                                <input type="text" name="info-visit" id="info-visit" disabled />
                             </div>
                         </form>
                     </div>
@@ -207,9 +249,9 @@
                     <div data-role="fieldcontain">
                         <label for="pending-for" class="select">Pending for:</label>
                         <select name="pending-for" id="pending-for">
-                            <option value="Dr. Harry Potter">Dr. Harry Potter</option>
-                            <option value="Dr. Ronald Weasley">Dr. Ronald Weasley</option>
-                            <option value="Dr. Hermione Granger">Dr. Hermione Granger</option>
+                            <option value="Doctor 1">Doctor 1</option>
+                            <option value="Doctor 2">Doctor 2</option>
+                            <option value="Doctor 3">Doctor 3</option>
                         </select>
                     </div>
                     <div data-role="fieldcontain">

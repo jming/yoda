@@ -27,7 +27,7 @@ db.transaction (function (transaction) {
 		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," 
 		+ "doctorName VARCHAR(100) NOT NULL, " 
 		+ "specialty VARCHAR(100) NOT NULL, "
-		+ "doctorImage VARCHAR(100) NOT NULL)"
+		+ "image VARCHAR(100) NOT NULL)"
 	transaction.executeSql(
 		sql,
 		undefined,
@@ -38,22 +38,108 @@ db.transaction (function (transaction) {
 	);
 });
 
+db.transaction (function (transaction) {
+	var sql = "CREATE TABLE IF NOT EXISTS patients " 
+		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
+		+ "username VARCHAR(100) NOT NULL, "
+		+ "password VARCHAR(100) NOT NULL, " 
+		+ "name VARCHAR(100) NOT NULL, "
+		+ "age VARCHAR(100) NOT NULL, "
+		+ "image VARCHAR (100) NOT NULL, " 
+		+ "updated DATETIME NOT NULL)"
+	transaction.executeSql(
+		sql,
+		undefined,
+		function () {},
+		function (transaction, err) {
+			console.error(err);
+		}
+	);
+})
+
+$(document).on("tap", "#createAccount", function() {
+	if ($("#username").val() != "" && $("#password").val() != "" && $("#password2").val() != "" 
+		&& $("#patientName").val() != "" && $("#patientAge").val() != "" && $("patientImage").val() != ""
+		&& $("#password").val() == $("#password2").val()) {
+		db.transaction( function (transaction) {
+			var sql = "INSERT INTO patients (username, password, name, age, image, updated) VALUES (?, ?, ?, ?, ?, ?)";
+			transaction.executeSql(
+				sql,
+				[$("#username").val(), $("#password").val(), $("#patientName").val(), $("#patientAge").val(), $("patientImage").val(), new Date()],
+				function (transaction, result) {
+					console.log(result);
+				},
+				function (transaction, err) {
+					console.error(err);
+				}
+			);
+		});
+		$.mobile.changePage("#TaskView");
+	}
+	else {
+		console.log("There was an error in your inputs!");
+		console.log($("#username").val() + $("#password").val() + $("#password2").val() + $("#patientName").val() + $("#patientAge").val() + $("patientImage").val());
+	}
+});
+
+$(document).on("tap", "#loginButton", function () {
+	db.transaction( function (transaction) {
+		// var sql = "SELECT * FROM patients WHERE username='" + $("#login-user").val() + "' AND password='" + $("#login-password").val() + "'";
+		// console.log(sql);
+		var sql = "SELECT * from patients";
+		transaction.executeSql(
+			sql,
+			undefined,
+			function (transaction, result) {
+				alert(result.rows.length);
+				console.log(result.rows);
+				if (result.rows.length != 0) {
+					var user = result.rows.item(1);
+					sessionStorage.name = user.name;
+					sessionStorage.age = user.age;
+					sessionStorage.image = user.image;
+					sessionStorage.updated = user.updated;
+					$.mobile.changePage("#LandingPage");
+					load_landing_page();
+				}
+				else {
+					alert("There was an error in signing in! Please try again.");
+					return false;
+					// $.mobile.changePage("#");
+				}
+			},
+			function (transaction, err) {
+				console.error(err);
+			}
+		);
+	})
+})
+
 // application level logic
-$(function () {
+// $(function () {
 
-	var DEFAULT_DOCTOR = "Dr. Harry Potter";
+var DEFAULT_DOCTOR = "Doctor 1";
 
-	// Login logic
-	$(document).on("tap", "#loginButton", function () {
-		// TODO: Store session information
-		// TODO: Check credentials
-		$.mobile.changePage("#LandingPage");
-	});
+	// // Login logic
+	// $(document).on("tap", "#loginButton", function () {
+	// 	// TODO: Store session information
+	// 	// TODO: Check credentials
+	// 	$.mobile.changePage("#LandingPage");
+	// });
+
+function load_landing_page() {
 
 	var $concern = $("#taskName");
 	var $concernList = $("#concernList");
 
+	// fill in information
+	$("#info-name").val(sessionStorage.name);
+	$("#info-age").val(sessionStorage.age);
+	$("#info-update").val(sessionStorage.updated);
+
 	display_concerns(DEFAULT_DOCTOR);
+
+}
 
 	// Add concern
 	$(document).on("tap", "#addConcern", function() {
@@ -88,17 +174,6 @@ $(function () {
 							);
 						});
 						display_concerns(DEFAULT_DOCTOR);
-						// var color = "#99ff99"
-						// if (urgency == "Medium")
-						// 	color = "ffff99";
-						// else if (urgency == "High")
-						// 	color = "ff9999";
-						// $concernList.append(
-						// 	"<li id='" + $i + "' class='ui-li-has-alt'>"
-						// 	+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+$i+")' class='ui-btn'>" + $concern + "</a>" 
-						// 	+ "<a href='#' data-icon='delete' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
-						// 	+ "</li>"
-						// );
 						$.mobile.changePage("#TaskView");		
 						$("#taskName").val("");
 					},
@@ -112,6 +187,7 @@ $(function () {
 			alert("Please enter a concern");
 		}
 	});
+
 
 	// Remove Task
 	$(document).on("tap", "#concernList.patient-view li a.close", function() {
@@ -147,8 +223,9 @@ $(function () {
 	$('#doctor-select').change(function () {
 		var selected = $("#doctor-select option:selected").text();
 		$("#info-doctor-name").val(selected);
-		$('#info-doctor-picture')[0].src = 
-			"assets/" + selected.replace('Dr. ', '').replace(' ','') + '.jpg'
+		$("#info-doctor-picture")[0].src = "/assets/filler.png";
+		// $('#info-doctor-picture')[0].src = 
+			// "assets/" + selected.replace('Dr. ', '').replace(' ','') + '.jpg'
 		// TODO: Fill in correct information
 		// TODO: Change the tasks listed
 		display_concerns(selected);
@@ -184,7 +261,7 @@ $(function () {
 	// TODO: Fill in patient-information based on login/session
 	// TODO: Fill in doctor-information based on selected doctor on top of page
 
-});
+// });
 
 // sort order of tasks
 $(document).bind('pageinit', function() {
