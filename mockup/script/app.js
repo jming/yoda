@@ -74,7 +74,7 @@ $(document).on("tap", "#createAccount", function() {
 				}
 			);
 		});
-		$.mobile.changePage("#TaskView");
+		$.mobile.changePage("#");
 	}
 	else {
 		console.log("There was an error in your inputs!");
@@ -84,9 +84,9 @@ $(document).on("tap", "#createAccount", function() {
 
 $(document).on("tap", "#loginButton", function () {
 	db.transaction( function (transaction) {
-		// var sql = "SELECT * FROM patients WHERE username='" + $("#login-user").val() + "' AND password='" + $("#login-password").val() + "'";
+		var sql = "SELECT * FROM patients WHERE username='" + $("#login-user").val() + "' AND password='" + $("#login-password").val() + "'";
 		// console.log(sql);
-		var sql = "SELECT * from patients";
+		// var sql = "SELECT * from patients";
 		transaction.executeSql(
 			sql,
 			undefined,
@@ -94,7 +94,7 @@ $(document).on("tap", "#loginButton", function () {
 				// alert(result.rows.length);
 				console.log(result.rows);
 				if (result.rows.length != 0) {
-					var user = result.rows.item(1);
+					var user = result.rows.item(0);
 					sessionStorage.name = user.name;
 					sessionStorage.age = user.age;
 					sessionStorage.image = user.image;
