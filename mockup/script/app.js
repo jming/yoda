@@ -55,7 +55,24 @@ db.transaction (function (transaction) {
 			console.error(err);
 		}
 	);
-})
+});
+
+// function check_stored() {
+// $(document).on("pageload", function () {
+// if (localStorage.name) {
+// 	alert("derp");
+// 	// load_landing_page();
+// 	$.mobile.changePage("#LandingPage");
+
+// }
+// })
+	// alert("ready!")
+
+	
+
+// }
+
+
 
 $(document).on("tap", "#createAccount", function() {
 	if ($("#username").val() != "" && $("#password").val() != "" && $("#password2").val() != "" 
@@ -95,11 +112,11 @@ $(document).on("tap", "#loginButton", function () {
 				console.log(result.rows);
 				if (result.rows.length != 0) {
 					var user = result.rows.item(0);
-					sessionStorage.name = user.name;
-					sessionStorage.age = user.age;
-					sessionStorage.image = user.image;
-					sessionStorage.updated = user.updated;
-					$.mobile.changePage("#LandingPage");
+					localStorage.name = user.name;
+					localStorage.age = user.age;
+					localStorage.image = user.image;
+					localStorage.updated = user.updated;
+					
 					load_landing_page();
 				}
 				else {
@@ -129,13 +146,15 @@ var DEFAULT_DOCTOR = "Doctor 1";
 
 function load_landing_page() {
 
+	$.mobile.changePage("#LandingPage");
+
 	var $concern = $("#taskName");
 	var $concernList = $("#concernList");
 
 	// fill in information
-	$("#info-name").val(sessionStorage.name);
-	$("#info-age").val(sessionStorage.age);
-	$("#info-update").val(sessionStorage.updated);
+	$("#info-name").val(localStorage.name);
+	$("#info-age").val(localStorage.age);
+	$("#info-update").val(localStorage.updated);
 
 	display_concerns(DEFAULT_DOCTOR);
 
@@ -148,9 +167,10 @@ function load_landing_page() {
 		if ($concern != "") {
 			var urgency = "High";
 			var urgency_list = document.getElementsByName("urgency-choice");
-			for (index =0; index < urgency.length; index++) {
-				if (urgency[index].checked)
-					urgency = urgency[index].id;
+			// console.log(urgency_list);
+			for (index =0; index < urgency_list.length; index++) {
+				if (urgency_list[index].checked)
+					urgency = urgency_list[index].id;
 			}
 			db.transaction(function (transaction) {
 				var sql = "INSERT INTO concerns (concernName, date, raisedBy, pendingFor, urgency, concernOrder) VALUES (?, ?, ?, ?, ?, ?)";
@@ -265,6 +285,7 @@ function load_landing_page() {
 
 // sort order of tasks
 $(document).bind('pageinit', function() {
+
     $( "#concernList" ).sortable();
     $( "#concernList" ).disableSelection();
     $( "#concernList" ).bind( "sortstop", function(event, ui) {
@@ -324,6 +345,7 @@ function display_concerns(doctor) {
 				if (result.rows.length) {
 					for (var i = 0; i < result.rows.length; i++) {
 						var row = result.rows.item(i);
+						// alert(row);
 						if (row.concernOrder != -1) {
 							var color = "99ff99";
 							if (row.urgency == "Medium")
