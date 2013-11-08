@@ -6,7 +6,7 @@ db.transaction (function (transaction) {
 		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
 		+ "concernName VARCHAR(100) NOT NULL, "
 		+ "date DATETIME NOT NULL, " 
-		+ "raisedBy VARCHAR(100) NOT NULL, "
+		// + "raisedBy VARCHAR(100) NOT NULL, "
 		+ "pendingFor VARCHAR(100) NOT NULL, "
 		+ "urgency VARCHAR(100) NOT NULL, "
 		+ "concernOrder INTEGER)"
@@ -136,7 +136,7 @@ $(document).on("tap", "#loginButton", function () {
 // $(function () {
 
 var DEFAULT_DOCTOR = "Doctor 1";
-
+display_concerns(DEFAULT_DOCTOR)
 	// // Login logic
 	// $(document).on("tap", "#loginButton", function () {
 	// 	// TODO: Store session information
@@ -173,12 +173,12 @@ function load_landing_page() {
 					urgency = urgency_list[index].id;
 			}
 			db.transaction(function (transaction) {
-				var sql = "INSERT INTO concerns (concernName, date, raisedBy, pendingFor, urgency, concernOrder) VALUES (?, ?, ?, ?, ?, ?)";
+				var sql = "INSERT INTO concerns (concernName, date, pendingFor, urgency, concernOrder) VALUES (?, ?, ?, ?, ?)";
 				transaction.executeSql(
 					sql, 
-					[$concern, new Date(), $("#raised-by").val(), $("#pending-for").val(), urgency, 0], 
+					[$concern, new Date(), $("#pending-for").val(), urgency, 0], 
 					function (transaction, result) {
-						console.log([$concern, new Date(), $("#raised-by").val(), $("#pending-for").val(), urgency, 0]);
+						console.log([$concern, new Date(), $("#pending-for").val(), urgency, 0]);
 						$("#noErrors").css("display","none");
 						$i = result.insertId;
 
@@ -193,7 +193,8 @@ function load_landing_page() {
 								}
 							);
 						});
-						display_concerns(DEFAULT_DOCTOR);
+						// TODO: clear all inputs
+						display_concerns($('#pending-for').val());
 						$.mobile.changePage("#TaskView");		
 						$("#taskName").val("");
 					},
@@ -238,12 +239,13 @@ function load_landing_page() {
 		 	
 		return false;
 	});
-
+$(function () {
 	// Change doctor information based on selection
 	$('#doctor-select').change(function () {
+		// console.log('doctor selected changed');
 		var selected = $("#doctor-select option:selected").text();
-		$("#info-doctor-name").val(selected);
-		$("#info-doctor-picture")[0].src = "/assets/filler.png";
+		// $("#info-doctor-name").val(selected);
+		// $("#info-doctor-picture")[0].src = "assets/filler.png";
 		// $('#info-doctor-picture')[0].src = 
 			// "assets/" + selected.replace('Dr. ', '').replace(' ','') + '.jpg'
 		// TODO: Fill in correct information
@@ -252,7 +254,7 @@ function load_landing_page() {
 
 		return false
 	});
-
+});
 	// Switch view by removing Doctor Information panel
 	$(document).on("tap", "#switchView", function() {
 		if ($('#doctor-information').is(':visible')) {
@@ -321,7 +323,7 @@ function set_details(id) {
 			function (transaction, result) {
 				var item = result.rows.item(0);
 				$("#detail-concern")[0].value = item.concernName;
-			    $("#detail-raised-by")[0].value = item.raisedBy;
+			    // $("#detail-raised-by")[0].value = item.raisedBy;
 			    $('#detail-pending-for')[0].value = item.pendingFor;
 			    $('#detail-urgency')[0].value = item.urgency;
 			    $('#detail-date')[0].value = item.date;
@@ -334,6 +336,12 @@ function set_details(id) {
 }
 
 function display_concerns(doctor) {
+
+	// fix the selector
+	$("#doctor-select").val(doctor).attr('selected', true).siblings('option').removeAttr('selected');
+	$('#doctor-select').selectmenu('refresh', true);
+
+	console.log('displaying concerns for ' + doctor);
 	$("#concernList").empty();
 	db.transaction( function(transaction) {
 		var sql = "SELECT * FROM concerns WHERE pendingFor='" + doctor + "' ORDER BY concernOrder";

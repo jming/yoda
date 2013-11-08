@@ -66,7 +66,7 @@
 </head> 
 <body> 
 
-<div data-role="page" id="LoginPage">
+<!-- <div data-role="page" id="LoginPage">
     <div data-role="header" data-theme="a">
         <h1>Login</h1>
     </div>
@@ -126,9 +126,9 @@
     </div>
 
 </div>
+ -->
 
-
-<div data-role="page" id="LandingPage">
+<!-- <div data-role="page" id="LandingPage">
     <div data-role="header" data-theme="a">
         <a href="#LoginPage" data-role="button" class="ui-btn">Logout</a>
         <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns</a>
@@ -165,19 +165,17 @@
         </div>
         <a href="#AddTasks" data-role="button" class="add-concern-button" data-icon="plus" style="background:#D14836;color:white;">Add concern</a>
     </div>
-</div>
+</div> -->
 
 
 <div data-role="page" id="TaskView" data-add-back-btn="true">
     <div data-role="header" data-theme="a">
-        <a href="#LandingPage" data-role="button" data-icon="home">Home</a>
-        <h1>Concerns</h1>
+        <!-- <a href="#LandingPage" data-role="button" data-icon="home">Home</a> -->
+        <h1 id="concerns-list-header">Patient View</h1>
         <a href="#TaskView" data-role="button" data-icon="home" class="ui-btn" id="switchView">Doctor View</a>
     </div>
     <div data-role="content">
-        <h2 id="concerns-list-header">Patient View</h2>
-        <div id="doctor-information">
-        <h3>Doctor Information</h3>
+        <div id="doctor-selector-div">
             <form>
                 <div data-role="fieldcontain">
                     <select id="doctor-select">
@@ -187,6 +185,12 @@
                     </select>
                 </div>
             </form>
+        </div>
+        <!-- <h2 id="concerns-list-header">Patient View</h2> -->
+
+        <div id="doctor-information">
+        <!-- <h3>Doctor Information</h3>
+            
             <div class="ui-grid-a info-breakpoint">
                 <div class="ui-block-a">
                     <div class="ui-bar">
@@ -211,11 +215,14 @@
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div id="concerns-list">
-            <h3>Patient Concern List</h3>
+            </div> -->
             <a href="#AddTasks" data-role="button" class="add-concern-button" data-icon="plus" style="background:#D14836;color:white;">Add concern</a>
+        </div>
+
+        <div id="concerns-list">
+
+            <!-- <h3>Patient Concern List</h3> -->
+            
             <ul data-role="listview" data-inset="true" id="concernList" class="patient-view">
 <!--                 <p id="noErrors" style="display:none;">You currently have no concerns stored.</p> -->
             </ul>
@@ -227,8 +234,8 @@
 <div data-role="page" id="AddTasks" data-add-back-btn="true">
     
     <div data-role="header" data-theme="a">
-    <a href="#LandingPage" data-role="button" data-icon="home">Home</a>
-    <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns</a>
+    <!-- <a href="#LandingPage" data-role="button" data-icon="home">Home</a> -->
+    <a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Back to concerns</a>
         <h1>Add New Concern</h1>
     </div>
         <div data-role="content">
@@ -238,14 +245,14 @@
                         <label for="taskName"> Concern: </label>
                         <input type="text" name="taskName" id="taskName" value="" />
                     </div>
-                    <div data-role="fieldcontain">
+                    <!-- <div data-role="fieldcontain">
                         <label for="raised-by" class="select">Raised by:</label>
                         <select name="raised-by" id="raised-by">
                             <option value="Mom">Mom</option>
                             <option value="Dad">Dad</option>
                             <option value="Sister">Sister</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div data-role="fieldcontain">
                         <label for="pending-for" class="select">Pending for:</label>
                         <select name="pending-for" id="pending-for">
@@ -283,12 +290,12 @@
             <form>
                 <div data-role="fieldcontain">
                     <label for="detail-concern">Concern:</label>
-                    <input type="text" name="detail-concern" id="detail-concern" disabled />
+                    <input type="text" name="detail-concern" id="detail-concern" disabled data-clear-btn="true"/>
                 </div>
-                <div data-role="fieldcontain">
+               <!--  <div data-role="fieldcontain">
                     <label for="detail-raised-by">Raised by:</label>
                     <input type="text" name="detail-raised-by" id="detail-raised-by" disabled />
-                </div>
+                </div> -->
                 <div data-role="fieldcontain">
                     <label for="detail-pending-for">Pending for:</label>
                     <input type="text" name="detail-pending-for" id="detail-pending-for" disabled />
