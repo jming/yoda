@@ -73,118 +73,12 @@
 	</style>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 </head> 
-<body> 
-
-<!-- <div data-role="page" id="LoginPage">
-	<div data-role="header" data-theme="a">
-		<h1>Login</h1>
-	</div>
-	<div data-role="content">
-		<form>
-			<div data-role="fieldcontain">
-				<label for="login-user">Username:</label>
-				<input type="text" name="login-user" id="login-user"/>
-			</div>
-			<div data-role="fieldcontain">
-				<label for="login-password">Password:</label>
-				<input type="password" name="login-password" id="login-password"/>
-			</div>
-			<input type="button" value="Login" id="loginButton" class="ui-btn" style="width:100%"/>
-			<a href="#CreateAccount">Create an account</a>
-		</form>
-	</div>
-</div>
-
-<div data-role="page" id="CreateAccount">
-
-	<div data-role="header" data-theme="a">
-		<a href="#LoginPage" data-role="button" class="ui-btn">Logout</a>
-		<a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Create an account</a>
-		<h1>YODA</h1>
-	</div>  
-	<div data-role="content">
-		<div class="form-area">
-			<form id="tasks-form"> 
-				<div data-role="fieldcontain">
-					<label for="username"> Username: </label>
-					<input type="text" name="username" id="username" value="" />
-				</div>  
-				<div data-role="fieldcontain">
-					<label for="password"> Password: </label>
-					<input type="password" name="password" id="password" value="" />
-				</div> 
-				<div data-role="fieldcontain">
-					<label for="password2"> Retype Password: </label>
-					<input type="password" name="password2" id="password2" value="" />
-				</div> 
-				<div data-role="fieldcontain">
-					<label for="patientName"> Patient Name: </label>
-					<input type="text" name="patientName" id="patientName" value="" />
-				</div> 
-				<div data-role="fieldcontain">
-					<label for="patientAge"> Patient Age: </label>
-					<input type="text" name="patientAge" id="patientAge" value="" />
-				</div>
-				<div data-role="fieldcontain">
-					<label for="patientImage"> Patient Picture: </label>
-					<input type="file" name="patientImage" id="patientImage" value="" />
-				</div>
-				<input type="button" value="Create Account" id="createAccount" class="ui-btn" style="background:#D14836;color:white;width:100%;" data-icon="plus" />
-			</form>
-		</div>
-	</div>
-
-</div>
- -->
-
-<!-- <div data-role="page" id="LandingPage">
-	<div data-role="header" data-theme="a">
-		<a href="#LoginPage" data-role="button" class="ui-btn">Logout</a>
-		<a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns</a>
-		<h1>YODA</h1>
-	</div>
-	<div data-role="content">
-		<div id="patient-information">
-			<h3>Patient Information</h3>
-			<div class="ui-grid-a info-breakpoint">
-				<div class="ui-block-a">
-					<div class="ui-bar">
-						<img class="info-picture" src="assets/filler.png" />
-					</div>
-				</div>
-				<div class="ui-block-b">
-					<div class="ui-bar">
-						<form>
-							<div data-role="fieldcontain">
-								<label for="info-name">Name:</label>
-								<input type="text" name="info-name" id="info-name" disabled value=""/>
-							</div>
-							<div data-role="fieldcontain">
-								<label for="info-age">Age:</label>
-								<input type="text" name="info-age" id="info-age" disabled value=""/>
-							</div>
-							<div data-role="fieldcontain">
-								<label for="info-update">Updated:</label>
-								<input type="text" name="info-update" id="info-update" disabled value="" />
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<a href="#AddTasks" data-role="button" class="add-concern-button" data-icon="plus" style="background:#D14836;color:white;">Add concern</a>
-	</div>
-</div> -->
-
+<body>
 
 <div data-role="page" id="TaskView" data-add-back-btn="true">
 	<div data-role="header" data-theme="a">
-		<!-- <a href="#LandingPage" data-role="button" data-icon="home">Home</a> -->
-
-		
-<!--         <a href="#TaskView" data-role="button" id="switchView">Doctor</a> -->
 		<h1 id="concerns-list-header">Concerns</h1>
-		<a href="#visit-menu" data-role='button' data-rel="popup" id="patientProfile" style="background:transparent;border:0px;shadow:0px;" class='ui-btn-right'>
+		<a href="#visit-menu" data-role='button' data-rel="popup" id="patientProfile" style="background:transparent;border:0px;shadow:0px;" class='ui-btn-right ui-icon-delete ui-btn-icon-left'>
 			<img style="max-height:45px;" src="assets/LunaLovegood.jpg">
 		</a>
 		<div data-role="popup" id="visit-menu">
@@ -224,7 +118,6 @@
 <div data-role="page" id="AddTasks" data-add-back-btn="true">
 	
 	<div data-role="header" data-theme="a">
-	<!-- <a href="#LandingPage" data-role="button" data-icon="home">Home</a> -->
 	<a href="#TaskView" data-role="button" data-theme="a">Back</a>
 		<h1>New Concern</h1>
 	</div>
@@ -270,8 +163,7 @@
 <div data-role="page" id="TaskDetails" data-add-back-btn="true">
 
 	<div data-role="header" data-theme="a">
-	<a href="#LandingPage" data-role="button" data-icon="home">Home</a>
-	<a href="#TaskView" data-role="button" class="ui-btn-right homeBtn" data-theme="a">Concerns</a>
+	<a href="#LandingPage" data-role="button">Home</a>
 		<h1>Concern Details</h1>
 	</div>
 	<div data-role="content">
@@ -281,10 +173,6 @@
 					<label for="detail-concern">Concern:</label>
 					<input type="text" name="detail-concern" id="detail-concern" disabled data-clear-btn="true"/>
 				</div>
-			   <!--  <div data-role="fieldcontain">
-					<label for="detail-raised-by">Raised by:</label>
-					<input type="text" name="detail-raised-by" id="detail-raised-by" disabled />
-				</div> -->
 				<div data-role="fieldcontain">
 					<label for="detail-pending-for">Pending for:</label>
 					<input type="text" name="detail-pending-for" id="detail-pending-for" disabled />

@@ -135,8 +135,8 @@ $(document).on("tap", "#loginButton", function () {
 // application level logic
 // $(function () {
 
-var DEFAULT_DOCTOR = "Doctor 1";
-display_concerns(DEFAULT_DOCTOR)
+var DEFAULT_SORT = "date";
+display_concerns(DEFAULT_SORT)
 	// // Login logic
 	// $(document).on("tap", "#loginButton", function () {
 	// 	// TODO: Store session information
@@ -156,7 +156,7 @@ function load_landing_page() {
 	$("#info-age").val(localStorage.age);
 	$("#info-update").val(localStorage.updated);
 
-	display_concerns(DEFAULT_DOCTOR);
+	display_concerns(DEFAULT_SORT);
 
 }
 
@@ -194,7 +194,7 @@ function load_landing_page() {
 							);
 						});
 						// TODO: clear all inputs
-						display_concerns($('#pending-for').val());
+						display_concerns(DEFAULT_SORT);
 						$.mobile.changePage("#TaskView");		
 						$("#taskName").val("");
 					},
@@ -239,22 +239,22 @@ function load_landing_page() {
 		 	
 		return false;
 	});
-$(function () {
-	// Change doctor information based on selection
-	$('#doctor-select').change(function () {
-		// console.log('doctor selected changed');
-		var selected = $("#doctor-select option:selected").text();
-		// $("#info-doctor-name").val(selected);
-		// $("#info-doctor-picture")[0].src = "assets/filler.png";
-		// $('#info-doctor-picture')[0].src = 
-			// "assets/" + selected.replace('Dr. ', '').replace(' ','') + '.jpg'
-		// TODO: Fill in correct information
-		// TODO: Change the tasks listed
-		display_concerns(selected);
+// $(function () {
+// 	// Change doctor information based on selection
+// 	$('#doctor-select').change(function () {
+// 		// console.log('doctor selected changed');
+// 		var selected = $("#doctor-select option:selected").text();
+// 		// $("#info-doctor-name").val(selected);
+// 		// $("#info-doctor-picture")[0].src = "assets/filler.png";
+// 		// $('#info-doctor-picture')[0].src = 
+// 			// "assets/" + selected.replace('Dr. ', '').replace(' ','') + '.jpg'
+// 		// TODO: Fill in correct information
+// 		// TODO: Change the tasks listed
+// 		display_concerns(selected);
 
-		return false
-	});
-});
+// 		return false
+// 	});
+// });
 	// Switch view by removing Doctor Information panel
 	// $(document).on("tap", "#switchView", function() {
 	// 	if ($('#doctor-information').is(':visible')) {
@@ -314,6 +314,7 @@ $(document).bind('pageinit', function() {
     });
 });
 
+// set details for given task!
 function set_details(id) {
 	db.transaction(function (transaction) {
 		var sql = "SELECT * FROM concerns WHERE id=" + id;
@@ -335,25 +336,25 @@ function set_details(id) {
 	})
 }
 
-function display_concerns(doctor) {
+function display_concerns(sorted_by) {
 
 	// fix the selector
-	$("#doctor-select").val(doctor).attr('selected', true).siblings('option').removeAttr('selected');
+	$("#sort-concerns").val(sorted_by).attr('selected', true).siblings('option').removeAttr('selected');
 	$('#doctor-select').selectmenu('refresh', true);
 
-	console.log('displaying concerns for ' + doctor);
+	console.log('displaying concerns sorted by ' + sorted_by);
 	$("#concernList").empty();
 	db.transaction( function(transaction) {
-		var sql = "SELECT * FROM concerns WHERE pendingFor='" + doctor + "' ORDER BY concernOrder";
+		var sql = "SELECT * FROM concerns ORDER BY " + sorted_by;
 		transaction.executeSql(
 			sql, 
 			undefined, 
 			function (transaction, result) {
 				console.log(result.rows);
 				if (result.rows.length) {
+					$("#noErrors").css("display","none");
 					for (var i = 0; i < result.rows.length; i++) {
 						var row = result.rows.item(i);
-						// alert(row);
 						if (row.concernOrder != -1) {
 							var color = "99ff99";
 							if (row.urgency == "Medium")
