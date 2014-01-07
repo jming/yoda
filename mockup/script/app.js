@@ -57,23 +57,6 @@ db.transaction (function (transaction) {
 	);
 });
 
-// function check_stored() {
-// $(document).on("pageload", function () {
-// if (localStorage.name) {
-// 	alert("derp");
-// 	// load_landing_page();
-// 	$.mobile.changePage("#LandingPage");
-
-// }
-// })
-	// alert("ready!")
-
-	
-
-// }
-
-
-
 $(document).on("tap", "#createAccount", function() {
 	if ($("#username").val() != "" && $("#password").val() != "" && $("#password2").val() != "" 
 		&& $("#patientName").val() != "" && $("#patientAge").val() != "" && $("patientImage").val() != ""
@@ -122,7 +105,6 @@ $(document).on("tap", "#loginButton", function () {
 				else {
 					alert("There was an error in signing in! Please try again.");
 					return false;
-					// $.mobile.changePage("#");
 				}
 			},
 			function (transaction, err) {
@@ -132,17 +114,9 @@ $(document).on("tap", "#loginButton", function () {
 	})
 })
 
-// application level logic
-// $(function () {
-
+// TODO: what should the default sort be??
 var DEFAULT_SORT = "date";
 display_concerns(DEFAULT_SORT)
-	// // Login logic
-	// $(document).on("tap", "#loginButton", function () {
-	// 	// TODO: Store session information
-	// 	// TODO: Check credentials
-	// 	$.mobile.changePage("#LandingPage");
-	// });
 
 function load_landing_page() {
 
@@ -239,51 +213,6 @@ function load_landing_page() {
 		 	
 		return false;
 	});
-// $(function () {
-// 	// Change doctor information based on selection
-// 	$('#doctor-select').change(function () {
-// 		// console.log('doctor selected changed');
-// 		var selected = $("#doctor-select option:selected").text();
-// 		// $("#info-doctor-name").val(selected);
-// 		// $("#info-doctor-picture")[0].src = "assets/filler.png";
-// 		// $('#info-doctor-picture')[0].src = 
-// 			// "assets/" + selected.replace('Dr. ', '').replace(' ','') + '.jpg'
-// 		// TODO: Fill in correct information
-// 		// TODO: Change the tasks listed
-// 		display_concerns(selected);
-
-// 		return false
-// 	});
-// });
-	// Switch view by removing Doctor Information panel
-	// $(document).on("tap", "#switchView", function() {
-	// 	if ($('#doctor-information').is(':visible')) {
-			
-	// 		// in the Doctor View
-	// 		$('#doctor-information').hide();
-	// 		$(this).removeClass('ui-btn-active');
-	// 		$('#concerns-list-header')[0].innerHTML = "Doctor View";
-	// 		$('#switchView')[0].innerHTML = "Patient View";
-	// 		$('#concernList').addClass('doctor-view').removeClass('patient-view');
-
-	// 	} else {
-
-	// 		// in the Patient View
-	// 		$('#doctor-information').show();
-	// 		$(this).removeClass('ui-btn-active');
-	// 		$('#concerns-list-header')[0].innerHTML = "Patient View";
-	// 		$('#switchView')[0].innerHTML = "Doctor View";
-	// 		$('#concernList').removeClass('doctor-view').addClass('patient-view');
-
-	// 	}
-		// TODO: change the header for the patient
-		// TODO: allow doctor to "check off" different tasks
-	// });	
-
-	// TODO: Fill in patient-information based on login/session
-	// TODO: Fill in doctor-information based on selected doctor on top of page
-
-// });
 
 // sort order of tasks
 $(document).bind('pageinit', function() {
@@ -313,6 +242,17 @@ $(document).bind('pageinit', function() {
     	$('#concernList').listview('refresh');
     });
 });
+
+// select order for display
+$(function () {
+	$('#sort-concerns').change(function() {
+
+		var selected = $('#sort-concerns option:selected').val();
+		display_concerns(selected);
+
+		return false
+	});
+})
 
 // set details for given task!
 function set_details(id) {

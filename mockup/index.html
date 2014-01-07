@@ -99,15 +99,17 @@
 					<label for="sort-concerns">Sort by:</label>
 					<select name="sort-concerns" id="sort-concerns">
 						<option value="date">Date</option>
-						<option value="doctor">Doctor</option>
+						<option value="pendingFor">Doctor</option>
 						<option value="urgency">Urgency</option>
+						<option value='concernOrder'>Custom</option>
+						<option value='concernName'>Concern name</option>
 					</select>
 				</div>
 			  </form>
 
 			<!-- <h3>Patient Concern List</h3> -->
 			
-			<ul data-role="listview" data-inset="true" id="concernList" class="patient-view">
+			<ul data-role="listview" data-inset="true" id="concernList" class="patient-view" data-autodividers="true">
                 <center><p id="noErrors">You currently have no concerns stored.</p></center>
 			</ul>
 		</div>
