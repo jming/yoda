@@ -98,7 +98,7 @@
 				<div class="ui-field-contain">
 					<label for="sort-concerns">Sort by:</label>
 					<select name="sort-concerns" id="sort-concerns">
-						<option value="date">Date</option>
+						<option value="date">Date added</option>
 						<option value="pendingFor">Doctor</option>
 						<option value="urgency">Urgency</option>
 						<option value='concernOrder'>Custom</option>
@@ -109,7 +109,7 @@
 
 			<!-- <h3>Patient Concern List</h3> -->
 			
-			<ul data-role="listview" data-inset="true" id="concernList" class="patient-view" data-autodividers="true">
+			<ul data-role="listview" data-inset="true" id="concernList" class="patient-view">
                 <center><p id="noErrors">You currently have no concerns stored.</p></center>
 			</ul>
 		</div>
@@ -127,11 +127,11 @@
 			<div class="form-area">
 				<form id="tasks-form"> 
 					<div data-role="fieldcontain">
-						<label for="taskName"> Concern: </label>
+						<label for="taskName">Concern:</label>
 						<input type="text" name="taskName" id="taskName" value="" />
 					</div>
 					<div data-role="fieldcontain">
-						<fieldset data-role="controlgroup">
+						<fieldset data-role="controlgroup" id='assigned-choices'>
 							<legend data-theme="a">Assigned to:</legend>
 							<input type="checkbox" name="Dr. Harry Potter" id="Dr. Harry Potter" />
 							<label for="Dr. Harry Potter">Dr. Harry Potter</label>
@@ -142,14 +142,14 @@
 						</fieldset>
 					</div>
 					<div data-role="fieldcontain">
-						<fieldset data-role="controlgroup" data-theme="a">
+						<fieldset data-role="controlgroup" data-theme="a" id='urgency-choices'>
 							<legend data-theme="a">Urgency:</legend>
-								<input type="radio" name="urgency-choice" id="High" value="on" checked="checked" data-theme="a" data-corners="false"/>
-								<label for="High" data-theme="a" style="background-color:#ff9999;">High</label>
-								<input type="radio" name="urgency-choice" id="Medium" value="off" data-theme="a"/>
-								<label for="Medium" data-theme="a" style="background-color: #ffff99;">Medium</label>
-								<input type="radio" name="urgency-choice" id="Low" value="other" data-theme="a" />
-								<label for="Low" data-theme="a" style="background-color: #99ff99;">Low</label>
+							<input type="radio" name="urgency-choice" id="High" checked="checked"/>
+							<label for="High" data-theme="a" style="background-color:#ff9999;">High</label>
+							<input type="radio" name="urgency-choice" id="Medium"/>
+							<label for="Medium" data-theme="a" style="background-color: #ffff99;">Medium</label>
+							<input type="radio" name="urgency-choice" id="Low"/>
+							<label for="Low" data-theme="a" style="background-color: #99ff99;">Low</label>
 						</fieldset>
 					</div>
 					<div data-role='fieldcontain'>
@@ -165,7 +165,7 @@
 <div data-role="page" id="TaskDetails" data-add-back-btn="true">
 
 	<div data-role="header" data-theme="a">
-	<a href="#LandingPage" data-role="button">Home</a>
+	<a href="#TaskView" data-role="button" data-theme="a">Back</a>
 		<h1>Concern Details</h1>
 	</div>
 	<div data-role="content">
@@ -173,19 +173,37 @@
 			<form>
 				<div data-role="fieldcontain">
 					<label for="detail-concern">Concern:</label>
-					<input type="text" name="detail-concern" id="detail-concern" disabled data-clear-btn="true"/>
+					<input type="text" name="detail-concern" id="detail-concern" disabled/>
+				</div>
+				<div data-role='fieldcontain'>
+					<label for="detail-date">Date added:</label>
+					<input type="text" name="detail-date" id="detail-date" disabled/>
 				</div>
 				<div data-role="fieldcontain">
-					<label for="detail-pending-for">Pending for:</label>
-					<input type="text" name="detail-pending-for" id="detail-pending-for" disabled />
+					<fieldset data-role="controlgroup" id='detail-assigned'>
+						<legend data-theme="a">Assigned to:</legend>
+						<input disabled type="checkbox" name="Dr. Harry Potter" id="Dr. Harry Potter" />
+						<label for="Dr. Harry Potter">Dr. Harry Potter</label>
+						<input disabled type="checkbox" name="Dr. Ronald Weasley" id="Dr. Ronald Weasley" />
+						<label for="Dr. Ronald Weasley">Dr. Ronald Weasley</label>
+						<input disabled type="checkbox" name="Dr. Hermione Granger" id="Dr. Hermione Granger" />
+						<label for="Dr. Hermione Granger">Dr. Hermione Granger</label>
+					</fieldset>
 				</div>
 				<div data-role="fieldcontain">
-					<label for="detail-urgency">Urgency:</label>
-					<input type="text" name="detail-urgency" id="detail-urgency" disabled />
+					<fieldset data-role="controlgroup" data-theme="a" id='detail-urgency'>
+						<legend data-theme="a">Urgency:</legend>
+						<input disabled type="radio" name="urgency-choice" id="High" checked="checked"/>
+						<label for="High" data-theme="a" style="background-color:#ff9999;">High</label>
+						<input disabled type="radio" name="urgency-choice" id="Medium"/>
+						<label for="Medium" data-theme="a" style="background-color: #ffff99;">Medium</label>
+						<input disabled type="radio" name="urgency-choice" id="Low"/>
+						<label for="Low" data-theme="a" style="background-color: #99ff99;">Low</label>
+					</fieldset>
 				</div>
-				<div data-role="fieldcontain">
-					<label for="detail-date">Date raised:</label>
-					<input type="text" name="detail-date" id="detail-date" disabled />
+				<div data-role='fieldcontain'>
+					<label for='detail-notes'>Notes:</label>
+					<textarea name='detail-notes' id='detail-notes' disabled></textarea>
 				</div>
 			</form>
 		</div>

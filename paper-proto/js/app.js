@@ -68,5 +68,5 @@ $(document).on('tap', 'add-concern-action', function() {
 });
 
 function get_urgency() {
-  return $('#urgency-choices input:checked').attr('id').split('-')[1]
+  return $('#urgency-choices input:checked').attr('id')
 }
