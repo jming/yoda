@@ -256,29 +256,29 @@ $(function () {
 	});
 });
 	// Switch view by removing Doctor Information panel
-	$(document).on("tap", "#switchView", function() {
-		if ($('#doctor-information').is(':visible')) {
+	// $(document).on("tap", "#switchView", function() {
+	// 	if ($('#doctor-information').is(':visible')) {
 			
-			// in the Doctor View
-			$('#doctor-information').hide();
-			$(this).removeClass('ui-btn-active');
-			$('#concerns-list-header')[0].innerHTML = "Doctor View";
-			$('#switchView')[0].innerHTML = "Patient View";
-			$('#concernList').addClass('doctor-view').removeClass('patient-view');
+	// 		// in the Doctor View
+	// 		$('#doctor-information').hide();
+	// 		$(this).removeClass('ui-btn-active');
+	// 		$('#concerns-list-header')[0].innerHTML = "Doctor View";
+	// 		$('#switchView')[0].innerHTML = "Patient View";
+	// 		$('#concernList').addClass('doctor-view').removeClass('patient-view');
 
-		} else {
+	// 	} else {
 
-			// in the Patient View
-			$('#doctor-information').show();
-			$(this).removeClass('ui-btn-active');
-			$('#concerns-list-header')[0].innerHTML = "Patient View";
-			$('#switchView')[0].innerHTML = "Doctor View";
-			$('#concernList').removeClass('doctor-view').addClass('patient-view');
+	// 		// in the Patient View
+	// 		$('#doctor-information').show();
+	// 		$(this).removeClass('ui-btn-active');
+	// 		$('#concerns-list-header')[0].innerHTML = "Patient View";
+	// 		$('#switchView')[0].innerHTML = "Doctor View";
+	// 		$('#concernList').removeClass('doctor-view').addClass('patient-view');
 
-		}
+	// 	}
 		// TODO: change the header for the patient
 		// TODO: allow doctor to "check off" different tasks
-	});	
+	// });	
 
 	// TODO: Fill in patient-information based on login/session
 	// TODO: Fill in doctor-information based on selected doctor on top of page
