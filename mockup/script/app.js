@@ -265,10 +265,12 @@ function set_details(id) {
 			undefined,
 			function (transaction, result) {
 				var item = result.rows.item(0);
+				console.log(item.pendingFor, item.urgency)
 				$("#detail-concern")[0].value = item.concernName;
 				$('#detail-date')[0].value = item.date;
 			    $('#detail-assigned')[0].value = item.pendingFor;
-			    $('#detail-urgency')[0].value = item.urgency;
+			    console.log($('#detail-urgency ' + '#' + item.urgency));
+			    $('#detail-urgency ' + '#' + item.urgency).attr('checked', true);
 			    $('#detail-notes')[0].value = item.notes;
 			},
 			function (transaction, error) {
