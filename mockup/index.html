@@ -2,6 +2,7 @@
 <html> 
 	<head> 
 	<title>YODA</title>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
 
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-alpha.2/jquery.mobile-1.4.0-alpha.2.min.css" />
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -92,7 +93,7 @@
 		
 	</div>
 	<div data-role="content">
-		<a href="#AddTasks" data-role="button" class="add-concern-button" data-icon="plus" style="background:#D14836;color:white;text-shadow:none;">Add concern</a>
+		<a href="#AddTasks" data-role="button" id='add-concern-button' data-icon="plus" style="background:#D14836;color:white;text-shadow:none;">Add concern</a>
 		<div id="concerns-list">
 			<form>
 				<div class="ui-field-contain">
@@ -106,8 +107,6 @@
 					</select>
 				</div>
 			  </form>
-
-			<!-- <h3>Patient Concern List</h3> -->
 			
 			<ul data-role="listview" data-inset="true" id="concernList" class="patient-view">
                 <center><p id="noErrors">You currently have no concerns stored.</p></center>
@@ -133,12 +132,25 @@
 					<div data-role="fieldcontain">
 						<fieldset data-role="controlgroup" id='assigned-choices'>
 							<legend data-theme="a">Assigned to:</legend>
-							<input type="checkbox" name="Dr. Harry Potter" id="Dr. Harry Potter" />
-							<label for="Dr. Harry Potter">Dr. Harry Potter</label>
-							<input type="checkbox" name="Dr. Ronald Weasley" id="Dr. Ronald Weasley" />
-							<label for="Dr. Ronald Weasley">Dr. Ronald Weasley</label>
-							<input type="checkbox" name="Dr. Hermione Granger" id="Dr. Hermione Granger" />
-							<label for="Dr. Hermione Granger">Dr. Hermione Granger</label>
+							<div id='assigned-choices-other'>
+							</div>
+							<div id='noDoctors'>
+								<p> You currently have no doctors stored. </p>
+								<a href='#addDoctor' data-rel='popup' class='ui-btn' data-position-to='window'>Add doctor</a>
+								<div data-role='popup' id='addDoctor'>
+									<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+									<form>
+										<div style='padding:10px 20px;'>
+											<h3> Add a doctor </h3>
+											<label for='doctor-name'>Doctor name:</label>
+											<input type='text' name='doctor-name' id='doctor-name'>
+											<label for='doctor-specialty'>Specialty:</label>
+											<input type='text' name='doctor-specialty' id='doctor-specialty'>
+											<a href="#" data-rel="back" class="ui-btn" id='add-doctor-action'>Add</a>
+										</div>
+									</form>
+								</div>
+							</div>
 						</fieldset>
 					</div>
 					<div data-role="fieldcontain">

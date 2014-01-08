@@ -27,8 +27,8 @@ db.transaction (function (transaction) {
 	var sql = "CREATE TABLE IF NOT EXISTS doctors "
 		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," 
 		+ "doctorName VARCHAR(100) NOT NULL, " 
-		+ "specialty VARCHAR(100) NOT NULL, "
-		+ "image VARCHAR(100) NOT NULL)"
+		+ "specialty VARCHAR(100) NOT NULL)"
+	// var sql = "DROP TABLE doctors";
 	transaction.executeSql(
 		sql,
 		undefined,
@@ -38,82 +38,6 @@ db.transaction (function (transaction) {
 		}
 	);
 });
-
-db.transaction (function (transaction) {
-	var sql = "CREATE TABLE IF NOT EXISTS patients " 
-		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
-		+ "username VARCHAR(100) NOT NULL, "
-		+ "password VARCHAR(100) NOT NULL, " 
-		+ "name VARCHAR(100) NOT NULL, "
-		+ "age VARCHAR(100) NOT NULL, "
-		+ "image VARCHAR (100) NOT NULL, " 
-		+ "updated DATETIME NOT NULL)"
-	transaction.executeSql(
-		sql,
-		undefined,
-		function () {},
-		function (transaction, err) {
-			console.error(err);
-		}
-	);
-});
-
-$(document).on("tap", "#createAccount", function() {
-	if ($("#username").val() != "" && $("#password").val() != "" && $("#password2").val() != "" 
-		&& $("#patientName").val() != "" && $("#patientAge").val() != "" && $("patientImage").val() != ""
-		&& $("#password").val() == $("#password2").val()) {
-		db.transaction( function (transaction) {
-			var sql = "INSERT INTO patients (username, password, name, age, image, updated) VALUES (?, ?, ?, ?, ?, ?)";
-			transaction.executeSql(
-				sql,
-				[$("#username").val(), $("#password").val(), $("#patientName").val(), $("#patientAge").val(), $("patientImage").val(), new Date()],
-				function (transaction, result) {
-					console.log(result);
-				},
-				function (transaction, err) {
-					console.error(err);
-				}
-			);
-		});
-		$.mobile.changePage("#");
-	}
-	else {
-		console.log("There was an error in your inputs!");
-		console.log($("#username").val() + $("#password").val() + $("#password2").val() + $("#patientName").val() + $("#patientAge").val() + $("patientImage").val());
-	}
-});
-
-$(document).on("tap", "#loginButton", function () {
-	db.transaction( function (transaction) {
-		var sql = "SELECT * FROM patients WHERE username='" + $("#login-user").val() + "' AND password='" + $("#login-password").val() + "'";
-		// console.log(sql);
-		// var sql = "SELECT * from patients";
-		transaction.executeSql(
-			sql,
-			undefined,
-			function (transaction, result) {
-				// alert(result.rows.length);
-				console.log(result.rows);
-				if (result.rows.length != 0) {
-					var user = result.rows.item(0);
-					localStorage.name = user.name;
-					localStorage.age = user.age;
-					localStorage.image = user.image;
-					localStorage.updated = user.updated;
-					
-					load_landing_page();
-				}
-				else {
-					alert("There was an error in signing in! Please try again.");
-					return false;
-				}
-			},
-			function (transaction, err) {
-				console.error(err);
-			}
-		);
-	})
-})
 
 // TODO: what should the default sort be??
 var DEFAULT_SORT = "date";
@@ -133,6 +57,56 @@ function load_landing_page() {
 
 	display_concerns(DEFAULT_SORT);
 
+}
+
+// navigate to add concern page
+$(document).on('tap', '#add-concern-button', function() {
+	display_assigned_choices();
+});
+
+// add a doctor
+$(document).on('tap', '#add-doctor-action', function () {
+	console.log('derp');
+	db.transaction(function(transaction) {
+		var sql = 'INSERT INTO doctors (doctorName, specialty) VALUES (?, ?)';
+		transaction.executeSql(
+			sql,
+			[$('#doctor-name').val(), $('#doctor-specialty').val()],
+			function(transaction, result) {
+				display_assigned_choices();
+			},
+			function(transaction, error) {
+				console.error(error);
+			}
+		);
+	})
+});
+
+function display_assigned_choices() {
+	console.log('displaying choices');
+	db.transaction(function (transaction) {
+		var sql = 'SELECT * FROM doctors';
+		transaction.executeSql(
+			sql,
+			undefined,
+			function(transaction, result) {
+				if (result.rows.length) {
+					$('#noDoctors').css('display', 'none');
+					for (var i=0; i<result.rows.length; i++) {
+						var row = result.rows.item(i);
+						var doctorId = 'doctor-' + row.id;
+						$('#assigned-choices-other').append(
+							"<input type='checkbox' name='" + doctorId + "' id='" + doctorId + "' />"
+							+ "<label for='" + doctorId + "'>" + row.doctorName + "</label>"
+						).trigger('create');
+					}
+				}
+			},
+			function (transaction, err) {
+				console.err(err);
+			}
+		);
+	});
 }
 
 // Add concern
@@ -174,6 +148,7 @@ $(document).on("tap", "#addConcern", function() {
 					display_concerns(DEFAULT_SORT);
 					$.mobile.changePage("#TaskView");		
 					$("#taskName").val("");
+					$('#concern-notes').val('');
 				},
 				function (transaction, error) {
 					console.error(error);
