@@ -83,7 +83,7 @@ $(document).on('tap', '#add-doctor-action', function () {
 });
 
 function display_assigned_choices() {
-	console.log('displaying choices');
+	// console.log('displaying choices');
 	db.transaction(function (transaction) {
 		var sql = 'SELECT * FROM doctors';
 		transaction.executeSql(
