@@ -39,6 +39,39 @@ db.transaction (function (transaction) {
 	);
 });
 
+$(document).on('tap', '#clear-all-concerns', function () {
+	db.transaction (function (transaction) {
+		var sql = "DROP TABLE concerns";
+		transaction.executeSql(
+			sql, 
+			undefined, 
+			function () {
+				location.reload();
+			}, 
+			function (transaction, err) {
+				console.error(err);
+			}
+		);
+	});
+});
+
+$(document).on('tap', '#clear-all-doctors', function () {
+
+	db.transaction (function (transaction) {
+		var sql = "DROP TABLE doctors";
+		transaction.executeSql(
+			sql,
+			undefined,
+			function () {
+				location.reload();
+			},
+			function (transaction, err) {
+				console.error(err);
+			}
+		);
+	});
+})
+
 // TODO: what should the default sort be??
 var DEFAULT_SORT = "date";
 display_concerns(DEFAULT_SORT)
