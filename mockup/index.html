@@ -76,6 +76,18 @@
 </head> 
 <body>
 
+<div data-role='page' id='intro-page'>
+	<div data-role='header' data-theme='a'>
+		<h1>YODA</h1>
+	</div>
+	<!-- <div data-role='content' style='background:#2e3192; color:white;text-shadow:none;'> -->
+	<div data-role='content'>
+		<p> Welcome to YODA, Your Organizer for Doctor's Appointments.</p>
+		<p>This application was developed through Harvard University's Case Augmenting Software Partners (CASPERS) research group to help children with complex conditions log their concerns before a doctor's appointment.</p>
+		<a href='#TaskView' class='ui-btn'>Click to begin</a>
+	</div>
+</div>
+
 <div data-role="page" id="TaskView" data-add-back-btn="true">
 	<div data-role="header" data-theme="a">
 		<h1 id="concerns-list-header">Concerns</h1>
@@ -94,14 +106,6 @@
 	</div>
 	<div data-role="content">
 		<a href="#AddTasks" data-role="button" id='add-concern-button' data-icon="plus" style="background:#D14836;color:white;text-shadow:none;">Add concern</a>
-		<div class='ui-grid-a'>
-			<div class='ui-block-a'>
-				<button id='clear-all-concerns'>Clear concerns</button>
-			</div>
-			<div class='ui-block-b'>
-				<button id='clear-all-doctors'>Clear doctors</button>
-			</div>
-		</div>
 		<div id="concerns-list">
 			<form>
 				<div class="ui-field-contain">
@@ -120,6 +124,7 @@
                 <center><p id="noErrors">You currently have no concerns stored.</p></center>
 			</ul>
 		</div>
+		<button id='clear-all-concerns'>Clear concerns</button>
 	</div>
 </div>
 
@@ -128,7 +133,7 @@
 	
 	<div data-role="header" data-theme="a">
 	<a href="#TaskView" data-role="button" data-theme="a">Back</a>
-		<h1>New Concern</h1>
+		<h1 id='add-tasks-heading'>New Concern</h1>
 	</div>
 		<div data-role="content">
 			<div class="form-area">
@@ -137,15 +142,18 @@
 						<label for="taskName">Concern:</label>
 						<input type="text" name="taskName" id="taskName" value="" />
 					</div>
+					<div data-role='fieldcontain' id='date-field' style='display:none;'>
+						<label for="detail-date">Date added:</label>
+						<input type="text" name="detail-date" id="detail-date" disabled/>
+					</div>
 					<div data-role="fieldcontain">
 						<fieldset data-role="controlgroup" id='assigned-choices'>
 							<legend data-theme="a">Assigned to:</legend>
 							<div id='assigned-choices-other'>
 							</div>
 							<div>
-
 								<p id='noDoctors'> You currently have no doctors stored. </p>
-								<a href='#addDoctor' data-rel='popup' class='ui-btn' data-position-to='window'>Add doctor</a>
+								<a href='#addDoctor' data-rel='popup' class='ui-btn' data-position-to='window' id='addDoctorButton'>Add doctor</a>
 								<div data-role='popup' id='addDoctor'>
 									<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 									<form>
@@ -177,13 +185,13 @@
 						<label for='concern-notes'>Notes:</label>
 						<textarea name='concern-notes' id='concern-notes'></textarea>
 					</div>
-					<input type="button" value="Add Concern" id="addConcern" class="ui-btn" style="background:#D14836;color:white;width:100%;" data-icon="plus" />
+					<button id="addConcern" class="ui-btn" style="background:#D14836;color:white;width:100%;text-shadow:none;" data-icon="plus">Add concern</button>
 				</form>    
 			</div>
 		</div>
 </div>
 
-<div data-role="page" id="TaskDetails" data-add-back-btn="true">
+<!-- <div data-role="page" id="TaskDetails" data-add-back-btn="true">
 
 	<div data-role="header" data-theme="a">
 	<a href="#TaskView" data-role="button" data-theme="a">Back</a>
@@ -229,7 +237,7 @@
 			</form>
 		</div>
 	</div>
-</div>
+</div> -->
 
 </body>
 </html>

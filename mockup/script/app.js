@@ -7,7 +7,7 @@ db.transaction (function (transaction) {
 		+ "concernName VARCHAR(100) NOT NULL, "
 		+ "date DATETIME NOT NULL, " 
 		// + "raisedBy VARCHAR(100) NOT NULL, "
-		+ "pendingFor VARCHAR(100) NOT NULL, "
+		+ "assigned VARCHAR(100) NOT NULL, "
 		+ "urgency VARCHAR(100) NOT NULL, "
 		+ "notes TEXT NOT NULL, "
 		+ "concernOrder INTEGER)"
@@ -46,17 +46,13 @@ $(document).on('tap', '#clear-all-concerns', function () {
 			sql, 
 			undefined, 
 			function () {
-				location.reload();
+				
 			}, 
 			function (transaction, err) {
 				console.error(err);
 			}
 		);
 	});
-});
-
-$(document).on('tap', '#clear-all-doctors', function () {
-
 	db.transaction (function (transaction) {
 		var sql = "DROP TABLE doctors";
 		transaction.executeSql(
@@ -70,7 +66,8 @@ $(document).on('tap', '#clear-all-doctors', function () {
 			}
 		);
 	});
-})
+	
+});
 
 // TODO: what should the default sort be??
 var DEFAULT_SORT = "date";
@@ -94,6 +91,26 @@ function load_landing_page() {
 
 // navigate to add concern page
 $(document).on('tap', '#add-concern-button', function() {
+	// delete the values in everything
+	$('#taskName').val('');
+ 	$('#concern-notes').val('');
+	// change heading
+	$('#add-tasks-heading').text('New Concern');
+	// make everything not disabled
+	$('#taskName').prop('disabled', false).trigger('create');
+	$('#date-field').css('display', 'none');
+	$('#concern-notes').prop('disabled', false).trigger('create');
+	$('#addConcern').css('display', 'block');
+	$('#addDoctorButton').css('display','block');
+
+	$('#assigned-choices input').checkboxradio('enable');
+	$('#assigned-choices input').prop('checked', false);
+	$('#assigned-choices input').checkboxradio('refresh');
+
+	$('#urgency-choices input').checkboxradio('enable');
+	$('#urgency-choices input').prop('checked', false);
+	$('#urgency-choices input').checkboxradio('refresh');
+
 	display_assigned_choices();
 });
 
@@ -106,6 +123,8 @@ $(document).on('tap', '#add-doctor-action', function () {
 			sql,
 			[$('#doctor-name').val(), $('#doctor-specialty').val()],
 			function(transaction, result) {
+				$('#doctor-name').val('');
+				$('#doctor-specialty').val('');
 				display_assigned_choices();
 			},
 			function(transaction, error) {
@@ -125,7 +144,8 @@ function display_assigned_choices() {
 			function(transaction, result) {
 				if (result.rows.length) {
 					$('#noDoctors').css('display', 'none');
-					for (var i=0; i<result.rows.length; i++) {
+					var doctors_displayed = $('#assigned-choices-other input').length
+					for (var i=doctors_displayed; i<result.rows.length; i++) {
 						var row = result.rows.item(i);
 						var doctorId = 'doctor-' + row.id;
 						$('#assigned-choices-other').append(
@@ -149,9 +169,13 @@ $(document).on("tap", "#addConcern", function() {
 	if ($concern != "") {
 		var urgency = $('#urgency-choices input:checked').attr('id');
 		var assigned_checked = $('#assigned-choices input:checked');
-		var assigned_to = assigned_checked.attr('id'); // TODO: only does first right now
+		var assigned_to = assigned_checked.attr('id');
+		for (var n = 1; n < assigned_checked.length; n++) {
+			assigned_to += ',' + $(assigned_checked[n]).attr('id');
+		}
+		console.log(assigned_to);
 		db.transaction(function (transaction) {
-			var sql = "INSERT INTO concerns (concernName, date, pendingFor, urgency, notes, concernOrder) VALUES (?, ?, ?, ?, ?, ?)";
+			var sql = "INSERT INTO concerns (concernName, date, assigned, urgency, notes, concernOrder) VALUES (?, ?, ?, ?, ?, ?)";
 			transaction.executeSql(
 				sql, 
 				[$concern, new Date(), assigned_to, urgency, $('#concern-notes').val(), 0], 
@@ -176,7 +200,7 @@ $(document).on("tap", "#addConcern", function() {
 					for (var i=0; i < assigned_checked.length; i++) {
 						assigned_checked[i].click();
 					}
-					$('#High').click();
+					$('#urgency-choices #High').prop('checked', true);
 
 					display_concerns(DEFAULT_SORT);
 					$.mobile.changePage("#TaskView");		
@@ -266,20 +290,39 @@ $(function () {
 
 // set details for given task!
 function set_details(id) {
+
+	// change heading
+	$('#add-tasks-heading').text('Concern Details');
+	// make everything disabled
+	$('#taskName').prop('disabled', true).trigger('create');
+	$('#date-field').css('display','inline');
+	$('#concern-notes').prop('disabled', true).trigger('create');
+	// show the doctors
+	display_assigned_choices();
+	// hide the button
+	$('#addConcern').css('display', 'none');
+	$('#addDoctorButton').css('display','none');
 	db.transaction(function (transaction) {
 		var sql = "SELECT * FROM concerns WHERE id=" + id;
 		transaction.executeSql(
 			sql,
 			undefined,
 			function (transaction, result) {
+				// console.log('inside set details')
 				var item = result.rows.item(0);
-				console.log(item.pendingFor, item.urgency)
-				$("#detail-concern")[0].value = item.concernName;
+				// console.log(item.pendingFor, item.urgency)
+				$("#taskName")[0].value = item.concernName;
 				$('#detail-date')[0].value = item.date;
-			    $('#detail-assigned')[0].value = item.pendingFor;
-			    console.log($('#detail-urgency ' + '#' + item.urgency));
-			    $('#detail-urgency ' + '#' + item.urgency).attr('checked', true);
-			    $('#detail-notes')[0].value = item.notes;
+				var assigned_to = item.assigned.split(',');
+				console.log(assigned_to);
+				for (var n = 0; n < assigned_to.length; n++) {
+					$('#assigned-choices #' + assigned_to[n]).prop('checked', true);
+				}
+				$('#assigned-choices input').checkboxradio('refresh');
+				$('#assigned-choices input').checkboxradio('disable');
+			    $('#urgency-choices ' + '#' + item.urgency).prop('checked', true);
+			    $('#urgency-choices input').checkboxradio('disable');
+			    $('#concern-notes')[0].value = item.notes;
 			},
 			function (transaction, error) {
 				console.error(error);
@@ -295,7 +338,7 @@ function display_concerns(sorted_by) {
 	$('#doctor-select').selectmenu('refresh', true);
 
 	console.log('displaying concerns sorted by ' + sorted_by);
-	$("#concernList").empty();
+	
 	db.transaction( function(transaction) {
 		if (sorted_by == 'date') {
 			var sql = "SELECT * FROM concerns ORDER BY " + sorted_by + ' DESC';
@@ -308,6 +351,7 @@ function display_concerns(sorted_by) {
 			function (transaction, result) {
 				console.log(result.rows);
 				if (result.rows.length) {
+					$("#concernList").empty();
 					$("#noErrors").css("display","none");
 					for (var i = 0; i < result.rows.length; i++) {
 						var row = result.rows.item(i);
@@ -319,7 +363,7 @@ function display_concerns(sorted_by) {
 								color = "ff9999";
 							$("#concernList").append(
 								"<li id='" + row.id + "' class='ui-li-has-alt'>"
-								+ "<a style='background-color: #" + color + ";' href='#TaskDetails' onclick='set_details("+row.id+")' class='ui-btn'>" + row.concernName + "</a>" 
+								+ "<a style='background-color: #" + color + ";' href='#AddTasks' onclick='set_details("+row.id+")' class='ui-btn'>" + row.concernName + "</a>" 
 								+ "<a href='#' data-icon='delete' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
 								+ "</li>"
 							);
