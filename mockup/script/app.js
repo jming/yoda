@@ -331,20 +331,25 @@ function set_details(id) {
 	})
 }
 
-function display_concerns(sorted_by) {
+function display_concerns_filtered(sorted_by, filtered_by) {
 
 	// fix the selector
 	$("#sort-concerns").val(sorted_by).attr('selected', true).siblings('option').removeAttr('selected');
 	$('#doctor-select').selectmenu('refresh', true);
 
-	console.log('displaying concerns sorted by ' + sorted_by);
+	console.log('displaying concerns sorted by ' + sorted_by + ' filtered by ' + filtered_by);
 	
 	db.transaction( function(transaction) {
-		if (sorted_by == 'date') {
-			var sql = "SELECT * FROM concerns ORDER BY " + sorted_by + ' DESC';
-		} else {
-			var sql = "SELECT * FROM concerns ORDER BY " + sorted_by;
+		var sql = "SELECT * FROM concerns"
+		if (filtered_by != null) {
+			sql += " WHERE assigned LIKE '%doctor-" + filtered_by + "%'";
 		}
+		if (sorted_by == 'date') {
+			sql += " ORDER BY " + sorted_by + ' DESC';
+		} else {
+			sql += " ORDER BY " + sorted_by;
+		}
+		console.log('display_concerns_filtered sql ' + sql);
 		transaction.executeSql(
 			sql, 
 			undefined, 
@@ -377,3 +382,76 @@ function display_concerns(sorted_by) {
 		);
 	});
 }
+
+function display_concerns(sorted_by) {
+	display_concerns_filtered(sorted_by, null);
+}
+
+$(document).on('tap', '#begin-visit-button', function() {
+	console.log('begin-visit-button tapped');
+	setTimeout(function() {
+		$('#visit-prepare-doctors').popup('open');
+	}, 0);
+
+	//fill visit-doctor-select
+	db.transaction(function (transaction) {
+		var sql = 'SELECT * FROM doctors';
+		transaction.executeSql(
+			sql,
+			undefined,
+			function(transaction, result) {
+				if (result.rows.length) {
+					$('#no-doctors-select').css('display', 'none');
+					$('#visit-doctor-form').css('display', 'block');
+					for (var i=0; i<result.rows.length; i++) {
+						var row = result.rows.item(i);
+						$('#visit-doctor-select')
+							.append("<option value='" + row.id + "'>" + row.doctorName + "</option>")
+							.trigger('create');
+					}
+				}
+			},
+			function (transaction, err) {
+				console.error(err);
+			}
+		);
+	});
+})
+
+$(document).on('tap', '#visit-doctor-selected', function() {
+
+	$('#visit-information').css('display', 'block');
+	$('#visit-doctor-information').empty();
+	var doctorId = $('#visit-doctor-select option:selected').val();
+	console.log(doctorId);
+	db.transaction(function(transaction) {
+		var sql = 'SELECT * FROM doctors WHERE id=' + doctorId;
+		transaction.executeSql(
+			sql,
+			undefined,
+			function(transaction, result) {
+				var doctorInfo = result.rows.item(0);
+				console.log(doctorInfo);
+				$('#visit-doctor-information').append(
+					"<h2>" + doctorInfo.doctorName + "</h2>"
+					+ "<p>Specialty: " + doctorInfo.specialty
+					+ "</p><p>Visit date: " + new Date() + "</p>"
+					// TODO: change formatting of date
+				);
+				display_concerns_filtered(DEFAULT_SORT, doctorId);
+			},
+			function(transaction, error) {
+				console.error(error);
+			}
+		);
+	});
+	// change title
+	$('#concerns-list-header').text('Visit')
+	// hide elements
+	$('#add-concern-button').css('display', 'none');
+	// $('#sortby-form').css('display', 'none');
+	$('#clear-all-concerns').css('display', 'none');
+})
+
+
+

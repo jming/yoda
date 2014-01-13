@@ -1,6 +1,6 @@
 <!DOCTYPE html> 
 <html> 
-	<head> 
+<head> 
 	<title>YODA</title>
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
 
@@ -82,13 +82,27 @@
 	</div>
 	<!-- <div data-role='content' style='background:#2e3192; color:white;text-shadow:none;'> -->
 	<div data-role='content'>
-		<p> Welcome to YODA, Your Organizer for Doctor's Appointments.</p>
+		<h2> <!-- Welcome to YODA, <br> -->Your Organizer for Doctor's Appointments.</h2>
+		<center><img src='assets/yoda.png' style='height:200px'/></center>
 		<p>This application was developed through Harvard University's Case Augmenting Software Partners (CASPERS) research group to help children with complex conditions log their concerns before a doctor's appointment.</p>
 		<a href='#TaskView' class='ui-btn'>Click to begin</a>
 	</div>
 </div>
 
 <div data-role="page" id="TaskView" data-add-back-btn="true">
+	<div data-role='popup' id='visit-prepare-doctors' class='ui-content' data-dismissible='false' data-position-to='window' data-overlay-theme='a'>
+		<div style='padding:20px;'>
+			<h2>Who will you be visiting?</h2>
+			<p id='no-doctors-select'>No doctors to select from. Please go back to <a href='#AddTasks'>"Add concerns"</a> to add one</p>
+			<form id='visit-doctor-form' style='display:none;'>
+				<div class='ui-field-contain'>
+					<select id='visit-doctor-select'></select>
+				</div>
+				<a href='#visit-prepare' data-rel='back' id='visit-doctor-selected' class='ui-btn'>Prepare Visit</a>
+			</form>
+			
+		</div>
+	</div>
 	<div data-role="header" data-theme="a">
 		<h1 id="concerns-list-header">Concerns</h1>
 		<a href="#visit-menu" data-role='button' data-rel="popup" id="patientProfile" style="background:transparent;border:0px;shadow:0px;" class='ui-btn-right ui-icon-delete ui-btn-icon-left'>
@@ -96,18 +110,23 @@
 		</a>
 		<div data-role="popup" id="visit-menu">
 		  <ul data-role="listview">
-			<li><a href="#">Prepare for visit</a></li>
-			<li><a href="#">Begin visit</a></li>
-			<li><a href="#">Review visits</a></li>
+			<!-- <li><a href='#visit-prepare' id='visit-prepare-button'>Prepare for visit</a></li> -->
+			<li><a href="#TaskView" id='begin-visit-button'>Begin visit</a></li>
+			<!-- <li><a href="#">Review visits</a></li> -->
 			<li><a href="#">Edit profile</a></li>
 		  </ul>
 		</div>
 		
 	</div>
 	<div data-role="content">
+		<div id='visit-information' style='display:none;'>
+			<div id='visit-doctor-information'>
+			</div>
+			<!-- <a href='#visit-begin' class='ui-btn' style="background:#458B00;color:white;text-shadow:none;">Begin Visit</a> -->
+		</div>
 		<a href="#AddTasks" data-role="button" id='add-concern-button' data-icon="plus" style="background:#D14836;color:white;text-shadow:none;">Add concern</a>
 		<div id="concerns-list">
-			<form>
+			<form id='sortby-form'>
 				<div class="ui-field-contain">
 					<label for="sort-concerns">Sort by:</label>
 					<select name="sort-concerns" id="sort-concerns">
@@ -128,116 +147,98 @@
 	</div>
 </div>
 
-
 <div data-role="page" id="AddTasks" data-add-back-btn="true">
 	
 	<div data-role="header" data-theme="a">
-	<a href="#TaskView" data-role="button" data-theme="a">Back</a>
+		<a href="#TaskView" data-role="button" data-theme="a">Back</a>
 		<h1 id='add-tasks-heading'>New Concern</h1>
 	</div>
-		<div data-role="content">
-			<div class="form-area">
-				<form id="tasks-form"> 
-					<div data-role="fieldcontain">
-						<label for="taskName">Concern:</label>
-						<input type="text" name="taskName" id="taskName" value="" />
-					</div>
-					<div data-role='fieldcontain' id='date-field' style='display:none;'>
-						<label for="detail-date">Date added:</label>
-						<input type="text" name="detail-date" id="detail-date" disabled/>
-					</div>
-					<div data-role="fieldcontain">
-						<fieldset data-role="controlgroup" id='assigned-choices'>
-							<legend data-theme="a">Assigned to:</legend>
-							<div id='assigned-choices-other'>
-							</div>
-							<div>
-								<p id='noDoctors'> You currently have no doctors stored. </p>
-								<a href='#addDoctor' data-rel='popup' class='ui-btn' data-position-to='window' id='addDoctorButton'>Add doctor</a>
-								<div data-role='popup' id='addDoctor'>
-									<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-									<form>
-										<div style='padding:10px 20px;'>
-											<h3> Add a doctor </h3>
-											<label for='doctor-name'>Doctor name:</label>
-											<input type='text' name='doctor-name' id='doctor-name'>
-											<label for='doctor-specialty'>Specialty:</label>
-											<input type='text' name='doctor-specialty' id='doctor-specialty'>
-											<a href="#" data-rel="back" class="ui-btn" id='add-doctor-action'>Add</a>
-										</div>
-									</form>
-								</div>
-							</div>
-						</fieldset>
-					</div>
-					<div data-role="fieldcontain">
-						<fieldset data-role="controlgroup" data-theme="a" id='urgency-choices'>
-							<legend data-theme="a">Urgency:</legend>
-							<input type="radio" name="urgency-choice" id="High" checked="checked"/>
-							<label for="High" data-theme="a" style="background-color:#ff9999;">High</label>
-							<input type="radio" name="urgency-choice" id="Medium"/>
-							<label for="Medium" data-theme="a" style="background-color: #ffff99;">Medium</label>
-							<input type="radio" name="urgency-choice" id="Low"/>
-							<label for="Low" data-theme="a" style="background-color: #99ff99;">Low</label>
-						</fieldset>
-					</div>
-					<div data-role='fieldcontain'>
-						<label for='concern-notes'>Notes:</label>
-						<textarea name='concern-notes' id='concern-notes'></textarea>
-					</div>
-					<button id="addConcern" class="ui-btn" style="background:#D14836;color:white;width:100%;text-shadow:none;" data-icon="plus">Add concern</button>
-				</form>    
-			</div>
-		</div>
-</div>
-
-<!-- <div data-role="page" id="TaskDetails" data-add-back-btn="true">
-
-	<div data-role="header" data-theme="a">
-	<a href="#TaskView" data-role="button" data-theme="a">Back</a>
-		<h1>Concern Details</h1>
-	</div>
 	<div data-role="content">
-		<div class="content-primary">
-			<form>
+		<div class="form-area">
+			<form id="tasks-form"> 
 				<div data-role="fieldcontain">
-					<label for="detail-concern">Concern:</label>
-					<input type="text" name="detail-concern" id="detail-concern" disabled/>
+					<label for="taskName">Concern:</label>
+					<input type="text" name="taskName" id="taskName" value="" />
 				</div>
-				<div data-role='fieldcontain'>
+				<div data-role='fieldcontain' id='date-field' style='display:none;'>
 					<label for="detail-date">Date added:</label>
 					<input type="text" name="detail-date" id="detail-date" disabled/>
 				</div>
 				<div data-role="fieldcontain">
-					<fieldset data-role="controlgroup" id='detail-assigned'>
+					<fieldset data-role="controlgroup" id='assigned-choices'>
 						<legend data-theme="a">Assigned to:</legend>
-						<input disabled type="checkbox" name="Dr. Harry Potter" id="Dr. Harry Potter" />
-						<label for="Dr. Harry Potter">Dr. Harry Potter</label>
-						<input disabled type="checkbox" name="Dr. Ronald Weasley" id="Dr. Ronald Weasley" />
-						<label for="Dr. Ronald Weasley">Dr. Ronald Weasley</label>
-						<input disabled type="checkbox" name="Dr. Hermione Granger" id="Dr. Hermione Granger" />
-						<label for="Dr. Hermione Granger">Dr. Hermione Granger</label>
+						<div id='assigned-choices-other'>
+						</div>
+						<div>
+							<p id='noDoctors'> You currently have no doctors stored. </p>
+							<a href='#addDoctor' data-rel='popup' class='ui-btn' data-position-to='window' id='addDoctorButton'>Add doctor</a>
+							<div data-role='popup' id='addDoctor'>
+								<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+								<form>
+									<div style='padding:10px 20px;'>
+										<h3> Add a doctor </h3>
+										<label for='doctor-name'>Doctor name:</label>
+										<input type='text' name='doctor-name' id='doctor-name'>
+										<label for='doctor-specialty'>Specialty:</label>
+										<input type='text' name='doctor-specialty' id='doctor-specialty'>
+										<a href="#" data-rel="back" class="ui-btn" id='add-doctor-action'>Add</a>
+									</div>
+								</form>
+							</div>
+						</div>
 					</fieldset>
 				</div>
 				<div data-role="fieldcontain">
-					<fieldset data-role="controlgroup" data-theme="a" id='detail-urgency'>
+					<fieldset data-role="controlgroup" data-theme="a" id='urgency-choices'>
 						<legend data-theme="a">Urgency:</legend>
-						<input disabled type="radio" name="urgency-choice" id="High"/>
+						<input type="radio" name="urgency-choice" id="High" checked="checked"/>
 						<label for="High" data-theme="a" style="background-color:#ff9999;">High</label>
-						<input disabled type="radio" name="urgency-choice" id="Medium"/>
+						<input type="radio" name="urgency-choice" id="Medium"/>
 						<label for="Medium" data-theme="a" style="background-color: #ffff99;">Medium</label>
-						<input disabled type="radio" name="urgency-choice" id="Low"/>
+						<input type="radio" name="urgency-choice" id="Low"/>
 						<label for="Low" data-theme="a" style="background-color: #99ff99;">Low</label>
 					</fieldset>
 				</div>
 				<div data-role='fieldcontain'>
-					<label for='detail-notes'>Notes:</label>
-					<textarea name='detail-notes' id='detail-notes' disabled></textarea>
+					<label for='concern-notes'>Notes:</label>
+					<textarea name='concern-notes' id='concern-notes'></textarea>
 				</div>
-			</form>
+				<button id="addConcern" class="ui-btn" style="background:#D14836;color:white;width:100%;text-shadow:none;" data-icon="plus">Add concern</button>
+			</form>    
 		</div>
 	</div>
-</div> -->
+</div>
+
+<div data-role='page' id='visit-prepare' data-add-back-btn="true">
+	<div data-role='popup' id='visit-prepare-doctors' class='ui-content' data-dismissible='false' data-position-to='window' data-overlay-theme='a'>
+		<div style='padding:20px;'>
+			<h2>Who will you be visiting?</h2>
+			<p id='no-doctors-select'>No doctors to select from. Please go back to <a href='#AddTasks'>"Add concerns"</a> to add one</p>
+			<form id='visit-doctor-form' style='display:none;'>
+				<div class='ui-field-contain'>
+					<select id='visit-doctor-select'></select>
+				</div>
+				<a href='#visit-prepare' data-rel='back' id='visit-doctor-selected' class='ui-btn'>Prepare Visit</a>
+			</form>
+			
+		</div>
+	</div>
+	<div data-role='header' data-theme='a'>
+		<h1> Prepare Visit </h1>
+	</div>
+	<div data-role='content'>
+		<div id='visit-information' style='display:none;'>
+			<div id='visit-doctor-information'>
+			</div>
+			<!-- <a href='#visit-begin' class='ui-btn' style="background:#458B00;color:white;text-shadow:none;">Begin Visit</a> -->
+		</div>
+		<div id='visit-concerns'>
+			<ul data-role='listview' data-inset='true' id='visit-concern-list' class='patient-view'>
+			</ul>
+		</div>
+	</div>
+	
+</div>
 
 </body>
 </html>
