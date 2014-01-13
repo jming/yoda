@@ -389,9 +389,10 @@ function display_concerns(sorted_by) {
 
 $(document).on('tap', '#begin-visit-button', function() {
 	console.log('begin-visit-button tapped');
-	setTimeout(function() {
-		$('#visit-prepare-doctors').popup('open');
-	}, 0);
+	// $('#visit-prepare-doctors').popup();
+	// setTimeout(function() {
+		
+	// }, 0);
 
 	//fill visit-doctor-select
 	db.transaction(function (transaction) {
@@ -445,12 +446,13 @@ $(document).on('tap', '#visit-doctor-selected', function() {
 			}
 		);
 	});
-	// change title
+
 	$('#concerns-list-header').text('Visit')
-	// hide elements
 	$('#add-concern-button').css('display', 'none');
-	// $('#sortby-form').css('display', 'none');
 	$('#clear-all-concerns').css('display', 'none');
+	$('#begin-visit-button').css('display', 'none');
+	$('#concernList').removeClass('patient-view');
+	$('#concernList').addClass('doctor-view');
 })
 
 

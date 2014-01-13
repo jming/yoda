@@ -80,49 +80,28 @@
 	<div data-role='header' data-theme='a'>
 		<h1>YODA</h1>
 	</div>
-	<!-- <div data-role='content' style='background:#2e3192; color:white;text-shadow:none;'> -->
+
 	<div data-role='content'>
-		<h2> <!-- Welcome to YODA, <br> -->Your Organizer for Doctor's Appointments.</h2>
-		<center><img src='assets/yoda.png' style='height:200px'/></center>
+		<center><img src='assets/yoda.png' style='height:180px'/></center>
+		<center><h2> Your Organizer for Doctor's Appointments</h2></center>
 		<p>This application was developed through Harvard University's Case Augmenting Software Partners (CASPERS) research group to help children with complex conditions log their concerns before a doctor's appointment.</p>
 		<a href='#TaskView' class='ui-btn'>Click to begin</a>
 	</div>
 </div>
 
 <div data-role="page" id="TaskView" data-add-back-btn="true">
-	<div data-role='popup' id='visit-prepare-doctors' class='ui-content' data-dismissible='false' data-position-to='window' data-overlay-theme='a'>
-		<div style='padding:20px;'>
-			<h2>Who will you be visiting?</h2>
-			<p id='no-doctors-select'>No doctors to select from. Please go back to <a href='#AddTasks'>"Add concerns"</a> to add one</p>
-			<form id='visit-doctor-form' style='display:none;'>
-				<div class='ui-field-contain'>
-					<select id='visit-doctor-select'></select>
-				</div>
-				<a href='#visit-prepare' data-rel='back' id='visit-doctor-selected' class='ui-btn'>Prepare Visit</a>
-			</form>
-			
-		</div>
-	</div>
+	
 	<div data-role="header" data-theme="a">
 		<h1 id="concerns-list-header">Concerns</h1>
-		<a href="#visit-menu" data-role='button' data-rel="popup" id="patientProfile" style="background:transparent;border:0px;shadow:0px;" class='ui-btn-right ui-icon-delete ui-btn-icon-left'>
-			<img style="max-height:45px;" src="assets/LunaLovegood.jpg">
+		<a href="#visit-menu" data-role='button' id="patientProfile" style="background:transparent;border:0px;shadow:0px;" class='ui-btn-right ui-icon-delete ui-btn-icon-left'>
+			<img style="max-height:45px;" src="assets/yoda.png">
 		</a>
-		<div data-role="popup" id="visit-menu">
-		  <ul data-role="listview">
-			<!-- <li><a href='#visit-prepare' id='visit-prepare-button'>Prepare for visit</a></li> -->
-			<li><a href="#TaskView" id='begin-visit-button'>Begin visit</a></li>
-			<!-- <li><a href="#">Review visits</a></li> -->
-			<li><a href="#">Edit profile</a></li>
-		  </ul>
-		</div>
 		
 	</div>
 	<div data-role="content">
 		<div id='visit-information' style='display:none;'>
 			<div id='visit-doctor-information'>
 			</div>
-			<!-- <a href='#visit-begin' class='ui-btn' style="background:#458B00;color:white;text-shadow:none;">Begin Visit</a> -->
 		</div>
 		<a href="#AddTasks" data-role="button" id='add-concern-button' data-icon="plus" style="background:#D14836;color:white;text-shadow:none;">Add concern</a>
 		<div id="concerns-list">
@@ -144,6 +123,20 @@
 			</ul>
 		</div>
 		<button id='clear-all-concerns'>Clear concerns</button>
+		<a href='#visit-prepare-doctors' data-role='button' data-rel='popup' style='background:#458B00;color:white;text-shadow:none;' id='begin-visit-button'>Begin Visit</a>
+		<div data-role='popup' id='visit-prepare-doctors' class='ui-content' data-dismissible='false' data-position-to='window' data-overlay-theme='a'>
+			<div style='padding:20px;'>
+				<h2>Who will you be visiting?</h2>
+				<p id='no-doctors-select'>No doctors to select from. Please go back to <a href='#AddTasks'>"Add concerns"</a> to add one</p>
+				<form id='visit-doctor-form' style='display:none;'>
+					<div class='ui-field-contain'>
+						<select id='visit-doctor-select'></select>
+					</div>
+					<a href='#visit-prepare' data-rel='back' id='visit-doctor-selected' class='ui-btn'>Begin visit</a>
+				</form>
+				
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -207,37 +200,6 @@
 			</form>    
 		</div>
 	</div>
-</div>
-
-<div data-role='page' id='visit-prepare' data-add-back-btn="true">
-	<div data-role='popup' id='visit-prepare-doctors' class='ui-content' data-dismissible='false' data-position-to='window' data-overlay-theme='a'>
-		<div style='padding:20px;'>
-			<h2>Who will you be visiting?</h2>
-			<p id='no-doctors-select'>No doctors to select from. Please go back to <a href='#AddTasks'>"Add concerns"</a> to add one</p>
-			<form id='visit-doctor-form' style='display:none;'>
-				<div class='ui-field-contain'>
-					<select id='visit-doctor-select'></select>
-				</div>
-				<a href='#visit-prepare' data-rel='back' id='visit-doctor-selected' class='ui-btn'>Prepare Visit</a>
-			</form>
-			
-		</div>
-	</div>
-	<div data-role='header' data-theme='a'>
-		<h1> Prepare Visit </h1>
-	</div>
-	<div data-role='content'>
-		<div id='visit-information' style='display:none;'>
-			<div id='visit-doctor-information'>
-			</div>
-			<!-- <a href='#visit-begin' class='ui-btn' style="background:#458B00;color:white;text-shadow:none;">Begin Visit</a> -->
-		</div>
-		<div id='visit-concerns'>
-			<ul data-role='listview' data-inset='true' id='visit-concern-list' class='patient-view'>
-			</ul>
-		</div>
-	</div>
-	
 </div>
 
 </body>
