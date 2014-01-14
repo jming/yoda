@@ -126,9 +126,14 @@
 		<div class="form-area">
 			<form id="concerns-form"> 
 
+				<div data-role='fieldcontain' style='display:none;'>
+					<label for='concern-id'>Concern Id: </label>
+					<input type='text' name='concern-id' id='concern-id' value='' />
+				</div><!-- hidden field for concernid -->
+
 				<div data-role="fieldcontain">
-					<label for="concernName">Concern:</label>
-					<input type="text" name="concernName" id="concernName" value="" />
+					<label for="concern-name">Concern:</label>
+					<input type="text" name="concern-name" id="concern-name" value="" />
 				</div><!-- concern name input field -->
 
 				<div data-role='fieldcontain' id='date-field' style='display:none;'>
@@ -188,9 +193,24 @@
 				</div><!-- urgency input field -->
 
 				<div data-role='fieldcontain'>
-					<label for='concern-notes'>Notes:</label>
+					<label for='concern-notes'>
+						Notes:
+						<a href='#edit-notes-popup' data-rel='popup' id='edit-notes-button' class='ui-btn ui-shadow ui-corner-all ui-icon-edit ui-btn-icon-notext' style='display:none;'>Edit</a>
+						<!-- edit notes button -->
+					</label>
 					<textarea name='concern-notes' id='concern-notes'></textarea>
 				</div><!-- notes input field -->
+
+				<div data-role='popup' id='edit-notes-popup'>
+					<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+					<form>
+						<div style='padding:20px 20px;'>
+							<h3> Edit notes</h3>
+							<textarea name='edit-notes-field' id='edit-notes-field'></textarea>
+							<a href="#" data-rel="back" class="ui-btn" id='edit-notes-save'>Save</a>
+						</div>
+					</form>
+				</div>
 
 				<button id="add-concern-action" style="background:#D14836;color:white;width:100%;text-shadow:none;" class="ui-btn ui-icon-plus ui-btn-icon-left">Add concern</button><!-- add concern action button -->
 

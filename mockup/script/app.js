@@ -18,8 +18,7 @@ db.transaction (function (transaction) {
 	transaction.executeSql(
 		sql, 
 		undefined, 
-		function () {
-		}, 
+		function () {}, 
 		function (transaction, err) {
 			console.error(err);
 		}
@@ -51,9 +50,7 @@ $(document).on('tap', '#clear-all-concerns', function () {
 		transaction.executeSql(
 			sql, 
 			undefined, 
-			function () {
-				
-			}, 
+			function () {}, 
 			function (transaction, err) {
 				console.error(err);
 			}
@@ -119,14 +116,14 @@ function display_assigned_choices() {
 $(document).on('tap', '#add-concern-button', function() {
 
 	// delete the values in everything
-	$('#concernName').val('');
+	$('#concern-name').val('');
  	$('#concern-notes').val('');
 
 	// change heading
 	$('#add-concerns-heading').text('New Concern');
 
 	// make everything not disabled
-	$('#concernName').prop('disabled', false).trigger('create');
+	$('#concern-name').prop('disabled', false).trigger('create');
 	$('#date-field').css('display', 'none');
 	$('#concern-notes').prop('disabled', false).trigger('create');
 
@@ -134,11 +131,13 @@ $(document).on('tap', '#add-concern-button', function() {
 	$('#add-concern-action').css('display', 'block');
 	$('#add-doctor-button').css('display','block');
 
+	$('#edit-notes-button').css('display', 'none');
+
 	// wait for pageshow
 	$('#add-concern').on('pageshow', function() {
 
 		// enable checkboxes if not on display-details version
-		if ($('#concernName').val() == "") {
+		if ($('#concern-name').val() == "") {
 			$('#urgency-choices input').checkboxradio('enable');
 			$('#urgency-choices input').prop('checked', false);
 			$('#urgency-choices input').checkboxradio('refresh');
@@ -187,7 +186,7 @@ $(document).on('tap', '#add-doctor-action', function () {
 $(document).on("tap", "#add-concern-action", function() {
 
 	// get values from form
-	var $concern = $("#concernName").val();
+	var $concern = $("#concern-name").val();
 	var $i = 0;
 	var urgency = $('#urgency-choices input:checked').attr('id');
 	var assigned_checked = $('#assigned-choices input:checked');
@@ -229,7 +228,7 @@ $(document).on("tap", "#add-concern-action", function() {
 						assigned_checked[i].click();
 					}
 					$('#urgency-choices #High').prop('checked', true);
-					$("#concernName").val("");
+					$("#concern-name").val("");
 					$('#concern-notes').val('');
 
 					// display default
@@ -352,7 +351,7 @@ function set_details(id) {
 	$('#add-concerns-heading').text('Concern Details');
 
 	// make everything disabled
-	$('#concernName').prop('disabled', true).trigger('create');
+	$('#concern-name').prop('disabled', true).trigger('create');
 	$('#date-field').css('display','inline');
 	$('#concern-notes').prop('disabled', true).trigger('create');
 
@@ -373,8 +372,11 @@ function set_details(id) {
 
 				var item = result.rows.item(0);
 
+				// set id
+				$('#concern-id')[0].value = item.id;
+
 				// set name
-				$("#concernName")[0].value = item.name;
+				$("#concern-name")[0].value = item.name;
 
 				// set date
 				$('#detail-date')[0].value = item.date;
@@ -394,6 +396,7 @@ function set_details(id) {
 
 			    // set notes
 			    $('#concern-notes')[0].value = item.notes;
+			    $('#edit-notes-button').css('display', 'block');
 			},
 			function (transaction, error) {
 				console.error(error);
@@ -401,6 +404,29 @@ function set_details(id) {
 		);
 	})
 }
+
+// put text of notes to edit
+$(document).on('tap', '#edit-notes-button', function() {
+	$('#edit-notes-field').val($('#concern-notes').val());
+})
+
+// save edit notes
+$(document).on('tap', '#edit-notes-save', function() {
+	var cid = $('#concern-id').val();
+	var notesval = $('#edit-notes-field').val();
+	db.transaction(function (transaction) {
+		var sql = "UPDATE concerns SET notes='" + notesval + "' WHERE id='" + cid + "'";
+		transaction.executeSql(
+			sql, 
+			undefined, 
+			function () {}, 
+			function (transaction, error) {
+				console.error("error: " + error.message);
+			}
+		);
+	});
+	$('#concern-notes').val(notesval);
+});
 
 // display concerns
 function display_concerns_filtered(sorted_by, filtered_by) {
