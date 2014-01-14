@@ -102,7 +102,6 @@ $(document).on('tap', '#add-concern-button', function() {
 	$('#addDoctorButton').css('display','block');
 
 	$('#AddTasks').on('pageshow', function() {
-		console.log('herehere')
 		$('#urgency-choices input').checkboxradio('enable');
 		$('#urgency-choices input').prop('checked', false);
 		$('#urgency-choices input').checkboxradio('refresh');
@@ -124,9 +123,14 @@ $(document).on('tap', '#add-doctor-action', function () {
 			sql,
 			[$('#doctor-name').val(), $('#doctor-specialty').val()],
 			function(transaction, result) {
+				$i = result.insertId;
 				$('#doctor-name').val('');
 				$('#doctor-specialty').val('');
 				display_assigned_choices();
+				setTimeout(function() {
+					console.log('here', 'doctor-' + $i);
+					$('#doctor-' + $i).prop('checked', true).checkboxradio('refresh');
+				}, 100);
 			},
 			function(transaction, error) {
 				console.error(error);
@@ -180,7 +184,7 @@ $(document).on("tap", "#addConcern", function() {
 			transaction.executeSql(
 				sql, 
 				[$concern, new Date(), assigned_to, urgency, $('#concern-notes').val(), 0], 
-				function (transaction, result) {
+				function(transaction, result) {
 					console.log([$concern, new Date(), assigned_to, urgency, 0]);
 					$("#noErrors").css("display","none");
 					$i = result.insertId;

@@ -104,7 +104,18 @@
 			<div id='visit-doctor-information'>
 			</div>
 		</div>
-		<a href="#AddTasks" data-role="button" id='add-concern-button' data-icon="plus" style="background:#D14836;color:white;text-shadow:none;">Add concern</a>
+		<fieldset class="ui-grid-b">
+		    <div class="ui-block-a">
+		    	<a href="#AddTasks" data-role="button" id='add-concern-button' style="background:#D14836;color:white;text-shadow:none;">Add concern</a>
+		    </div>
+		    <div class="ui-block-b">
+		    	<button id='clear-all-concerns'>Clear concerns</button>
+		    </div>
+		    <div class="ui-block-c">
+		    	<a href='#visit-prepare-doctors' data-role='button' data-rel='popup' style='background:#458B00;color:white;text-shadow:none;' id='begin-visit-button'>Begin Visit</a>
+		    </div>
+		</fieldset>
+		
 		<div id="concerns-list">
 			<form id='sortby-form'>
 				<div class="ui-field-contain">
@@ -123,8 +134,8 @@
                 <center><p id="noErrors">You currently have no concerns stored.</p></center>
 			</ul>
 		</div>
-		<button id='clear-all-concerns'>Clear concerns</button>
-		<a href='#visit-prepare-doctors' data-role='button' data-rel='popup' style='background:#458B00;color:white;text-shadow:none;' id='begin-visit-button'>Begin Visit</a>
+		
+		
 		<a href='#TaskView' data-role='button' id='visit-complete-button' style='display:none;'>Complete Visit</a>
 		<div data-role='popup' id='visit-prepare-doctors' class='ui-content' data-dismissible='false' data-position-to='window' data-overlay-theme='a'>
 			<div style='padding:20px;'>
@@ -132,9 +143,11 @@
 				<p id='no-doctors-select'>No doctors to select from. Please go back to <a href='#AddTasks'>"Add concerns"</a> to add one</p>
 				<form id='visit-doctor-form' style='display:none;'>
 					<div class='ui-field-contain'>
-						<select id='visit-doctor-select'></select>
+						<select id='visit-doctor-select'>
+							<option value='empty'></option>
+						</select>
 					</div>
-					<a href='#visit-prepare' data-rel='back' id='visit-doctor-selected' class='ui-btn'>Begin visit</a>
+					<a href='#visit-prepare' data-rel='back' id='visit-doctor-selected' class='ui-btn' style='background:#458B00;color:white;text-shadow:none;'>Begin visit</a>
 				</form>
 				
 			</div>
