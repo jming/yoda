@@ -102,15 +102,17 @@ $(document).on('tap', '#add-concern-button', function() {
 	$('#addDoctorButton').css('display','block');
 
 	$('#AddTasks').on('pageshow', function() {
-		$('#urgency-choices input').checkboxradio('enable');
-		$('#urgency-choices input').prop('checked', false);
-		$('#urgency-choices input').checkboxradio('refresh');
+		if ($('#taskName').val() == "") {
+			$('#urgency-choices input').checkboxradio('enable');
+			$('#urgency-choices input').prop('checked', false);
+			$('#urgency-choices input').checkboxradio('refresh');
 
-		display_assigned_choices();
+			display_assigned_choices();
 
-		$('#assigned-choices input').checkboxradio('enable');
-		$('#assigned-choices input').prop('checked', false);
-		$('#assigned-choices input').checkboxradio('refresh');
+			$('#assigned-choices input').checkboxradio('enable');
+			$('#assigned-choices input').prop('checked', false);
+			$('#assigned-choices input').checkboxradio('refresh');
+		}
 	});
 });
 
@@ -171,9 +173,10 @@ function display_assigned_choices() {
 $(document).on("tap", "#addConcern", function() {
 	var $concern = $("#taskName").val();
 	var $i = 0;
-	if ($concern != "") {
-		var urgency = $('#urgency-choices input:checked').attr('id');
-		var assigned_checked = $('#assigned-choices input:checked');
+	var urgency = $('#urgency-choices input:checked').attr('id');
+	var assigned_checked = $('#assigned-choices input:checked');
+	if (($concern != "") && (urgency != null) && assigned_checked.length > 0) {
+		
 		var assigned_to = assigned_checked.attr('id');
 		for (var n = 1; n < assigned_checked.length; n++) {
 			assigned_to += ',' + $(assigned_checked[n]).attr('id');
@@ -218,7 +221,7 @@ $(document).on("tap", "#addConcern", function() {
 			);
 		});
 	} else {
-		alert('Please enter a concern!');
+		alert('Please fill in all required fields!');
 	}
 });
 
@@ -341,6 +344,7 @@ function set_details(id) {
 				$('#assigned-choices input').checkboxradio('refresh');
 				$('#assigned-choices input').checkboxradio('disable');
 			    $('#urgency-choices ' + '#' + item.urgency).prop('checked', true);
+			    $('#urgency-choices input').checkboxradio('refresh');
 			    $('#urgency-choices input').checkboxradio('disable');
 			    $('#concern-notes')[0].value = item.notes;
 			},

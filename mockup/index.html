@@ -92,7 +92,7 @@
 <div data-role="page" id="TaskView">
 	
 	<div data-role="header" data-theme="a">
-		<a href="#TaskView" data-role="button" data-theme="a" id='back-task-view' style='display:none;'>Back</a>
+		<a href="#TaskView" data-role="button" data-theme="a" id='back-task-view' class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-back ui-btn-icon-notext" style='display:none;margin:10px;'>Back</a>
 		<h1 id="concerns-list-header">Concerns</h1>
 		<a href="#visit-menu" data-role='button' id="patientProfile" style="background:transparent;border:0px;shadow:0px;" class='ui-btn-right ui-icon-delete ui-btn-icon-left'>
 			<img style="max-height:45px;" src="assets/yoda.png">
@@ -104,15 +104,15 @@
 			<div id='visit-doctor-information'>
 			</div>
 		</div>
-		<fieldset class="ui-grid-b">
+		<fieldset class="ui-grid-b ui-responsive">
 		    <div class="ui-block-a">
-		    	<a href="#AddTasks" data-role="button" id='add-concern-button' style="background:#D14836;color:white;text-shadow:none;">Add concern</a>
+		    	<a href="#AddTasks" data-role="button" id='add-concern-button' style="background:#D14836;color:white;text-shadow:none;" class="ui-btn ui-icon-plus ui-btn-icon-left">Add concern</a>
 		    </div>
 		    <div class="ui-block-b">
-		    	<button id='clear-all-concerns'>Clear concerns</button>
+		    	<button id='clear-all-concerns' class="ui-btn ui-icon-delete ui-btn-icon-left">Clear concerns</button>
 		    </div>
 		    <div class="ui-block-c">
-		    	<a href='#visit-prepare-doctors' data-role='button' data-rel='popup' style='background:#458B00;color:white;text-shadow:none;' id='begin-visit-button'>Begin Visit</a>
+		    	<a href='#visit-prepare-doctors' data-role='button' data-rel='popup' style='background:#458B00;color:white;text-shadow:none;' id='begin-visit-button' class="ui-btn ui-icon-calendar ui-btn-icon-left">Begin Visit</a>
 		    </div>
 		</fieldset>
 		
@@ -136,18 +136,19 @@
 		</div>
 		
 		
-		<a href='#TaskView' data-role='button' id='visit-complete-button' style='display:none;'>Complete Visit</a>
+		<a href='#TaskView' data-role='button' id='visit-complete-button' class="ui-btn ui-icon-calendar ui-btn-icon-left" style='background:#458B00;color:white;text-shadow:none;display:none;'>Complete Visit</a>
 		<div data-role='popup' id='visit-prepare-doctors' class='ui-content' data-dismissible='false' data-position-to='window' data-overlay-theme='a'>
 			<div style='padding:20px;'>
 				<h2>Who will you be visiting?</h2>
-				<p id='no-doctors-select'>No doctors to select from. Please go back to <a href='#AddTasks'>"Add concerns"</a> to add one</p>
+				<p id='no-doctors-select'>No doctors to select from. Please go back to <a href='#AddTasks'>"Add concerns"</a> to add one.</p>
+				<a href='#AddTasks' class='ui-btn'>Back</a>
 				<form id='visit-doctor-form' style='display:none;'>
 					<div class='ui-field-contain'>
 						<select id='visit-doctor-select'>
 							<option value='empty'></option>
 						</select>
 					</div>
-					<a href='#visit-prepare' data-rel='back' id='visit-doctor-selected' class='ui-btn' style='background:#458B00;color:white;text-shadow:none;'>Begin visit</a>
+					<a href='#visit-prepare' data-rel='back' id='visit-doctor-selected' class="ui-btn ui-icon-calendar ui-btn-icon-left" style='background:#458B00;color:white;text-shadow:none;'>Begin visit</a>
 				</form>
 				
 			</div>
@@ -155,10 +156,11 @@
 	</div>
 </div>
 
-<div data-role="page" id="AddTasks" data-add-back-btn="true">
+<div data-role="page" id="AddTasks">
 	
 	<div data-role="header" data-theme="a">
-		<a href="#TaskView" data-role="button" data-theme="a">Back</a>
+		<!-- <a href="#TaskView" data-role="button" data-theme="a">Back</a> -->
+		<a href='#TaskView' class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-back ui-btn-icon-notext" style='margin:10px;'>back</a>
 		<h1 id='add-tasks-heading'>New Concern</h1>
 	</div>
 	<div data-role="content">
@@ -211,7 +213,7 @@
 					<label for='concern-notes'>Notes:</label>
 					<textarea name='concern-notes' id='concern-notes'></textarea>
 				</div>
-				<button id="addConcern" class="ui-btn" style="background:#D14836;color:white;width:100%;text-shadow:none;" data-icon="plus">Add concern</button>
+				<button id="addConcern" style="background:#D14836;color:white;width:100%;text-shadow:none;" class="ui-btn ui-icon-plus ui-btn-icon-left">Add concern</button>
 			</form>    
 		</div>
 	</div>
