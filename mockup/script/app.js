@@ -76,8 +76,71 @@ $(document).on('tap', '#clear-all-concerns', function () {
 /* DISPLAY FUNCTIONS */
 
 var DEFAULT_SORT = "date";
-
 display_concerns(DEFAULT_SORT)
+
+// display concerns
+function display_concerns_filtered(sorted_by, filtered_by) {
+
+	// fix the selector
+	$("#concern-list-sort").val(sorted_by).attr('selected', true).siblings('option').removeAttr('selected');
+	$('#doctor-select').selectmenu('refresh', true);
+	
+	db.transaction( function(transaction) {
+
+		var sql = "SELECT * FROM concerns WHERE checked IS NULL"
+
+		// add filtered by params
+		if (filtered_by != null) {
+			sql += " AND assigned LIKE '%doctor-" + filtered_by + "%'";
+		}
+		
+		// add sorted by params
+		if (sorted_by == 'date') {
+			sql += " ORDER BY " + sorted_by + ' DESC';
+		} else {
+			sql += " ORDER BY " + sorted_by;
+		}
+
+		transaction.executeSql(
+			sql, 
+			undefined, 
+			function (transaction, result) {
+				if (result.rows.length) {
+
+					// remove previous elements
+					$("#concern-list").empty();
+					$("#no-concern").css("display","none");
+
+					// add each list item
+					for (var i = 0; i < result.rows.length; i++) {
+						var row = result.rows.item(i);
+						if (row.ordering != -1) {
+							var color = "99ff99";
+							if (row.urgency == "Medium")
+								color = "ffff99";
+							else if (row.urgency == "High")
+								color = "ff9999";
+							$("#concern-list").append(
+								"<li id='" + row.id + "' class='ui-li-has-alt'>"
+								+ "<a style='background-color: #" + color + ";' href='#add-concern' onclick='set_details("+row.id+")' class='ui-btn'>" + row.name + "</a>" 
+								+ "<a href='#' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
+								+ "</li>"
+							);
+						}
+					}
+				}
+			}, 
+			function (transaction, err) {
+				console.error(err);
+			}
+		);
+	});
+}
+
+// basic display without filter
+function display_concerns(sorted_by) {
+	display_concerns_filtered(sorted_by, null);
+}
 
 // display possible doctors
 function display_assigned_choices() {
@@ -428,69 +491,7 @@ $(document).on('tap', '#edit-notes-save', function() {
 	$('#concern-notes').val(notesval);
 });
 
-// display concerns
-function display_concerns_filtered(sorted_by, filtered_by) {
-
-	// fix the selector
-	$("#concern-list-sort").val(sorted_by).attr('selected', true).siblings('option').removeAttr('selected');
-	$('#doctor-select').selectmenu('refresh', true);
-	
-	db.transaction( function(transaction) {
-
-		var sql = "SELECT * FROM concerns WHERE checked IS NULL"
-
-		// add filtered by params
-		if (filtered_by != null) {
-			sql += " AND assigned LIKE '%doctor-" + filtered_by + "%'";
-		}
-		
-		// add sorted by params
-		if (sorted_by == 'date') {
-			sql += " ORDER BY " + sorted_by + ' DESC';
-		} else {
-			sql += " ORDER BY " + sorted_by;
-		}
-
-		transaction.executeSql(
-			sql, 
-			undefined, 
-			function (transaction, result) {
-				if (result.rows.length) {
-
-					// remove previous elements
-					$("#concern-list").empty();
-					$("#no-concern").css("display","none");
-
-					// add each list item
-					for (var i = 0; i < result.rows.length; i++) {
-						var row = result.rows.item(i);
-						if (row.ordering != -1) {
-							var color = "99ff99";
-							if (row.urgency == "Medium")
-								color = "ffff99";
-							else if (row.urgency == "High")
-								color = "ff9999";
-							$("#concern-list").append(
-								"<li id='" + row.id + "' class='ui-li-has-alt'>"
-								+ "<a style='background-color: #" + color + ";' href='#add-concern' onclick='set_details("+row.id+")' class='ui-btn'>" + row.name + "</a>" 
-								+ "<a href='#' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
-								+ "</li>"
-							);
-						}
-					}
-				}
-			}, 
-			function (transaction, err) {
-				console.error(err);
-			}
-		);
-	});
-}
-
-// basic display without filter
-function display_concerns(sorted_by) {
-	display_concerns_filtered(sorted_by, null);
-}
+/* VISIT FUNCTIONS */
 
 // select which doctor visiting
 $(document).on('tap', '#visit-begin-button', function() {
