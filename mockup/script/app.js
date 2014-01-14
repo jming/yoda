@@ -6,12 +6,11 @@ db.transaction (function (transaction) {
 		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
 		+ "concernName VARCHAR(100) NOT NULL, "
 		+ "date DATETIME NOT NULL, " 
-		// + "raisedBy VARCHAR(100) NOT NULL, "
 		+ "assigned VARCHAR(100) NOT NULL, "
 		+ "urgency VARCHAR(100) NOT NULL, "
 		+ "notes TEXT NOT NULL, "
-		+ "concernOrder INTEGER)"
-	// var sql = "DROP TABLE concerns";
+		+ "concernOrder INTEGER, "
+		+ "checked DATETIME)"
 	transaction.executeSql(
 		sql, 
 		undefined, 
@@ -28,7 +27,6 @@ db.transaction (function (transaction) {
 		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," 
 		+ "doctorName VARCHAR(100) NOT NULL, " 
 		+ "specialty VARCHAR(100) NOT NULL)"
-	// var sql = "DROP TABLE doctors";
 	transaction.executeSql(
 		sql,
 		undefined,
@@ -103,15 +101,18 @@ $(document).on('tap', '#add-concern-button', function() {
 	$('#addConcern').css('display', 'block');
 	$('#addDoctorButton').css('display','block');
 
-	$('#assigned-choices input').checkboxradio('enable');
-	$('#assigned-choices input').prop('checked', false);
-	$('#assigned-choices input').checkboxradio('refresh');
+	$('#AddTasks').on('pageshow', function() {
+		console.log('herehere')
+		$('#urgency-choices input').checkboxradio('enable');
+		$('#urgency-choices input').prop('checked', false);
+		$('#urgency-choices input').checkboxradio('refresh');
 
-	$('#urgency-choices input').checkboxradio('enable');
-	$('#urgency-choices input').prop('checked', false);
-	$('#urgency-choices input').checkboxradio('refresh');
+		display_assigned_choices();
 
-	display_assigned_choices();
+		$('#assigned-choices input').checkboxradio('enable');
+		$('#assigned-choices input').prop('checked', false);
+		$('#assigned-choices input').checkboxradio('refresh');
+	});
 });
 
 // add a doctor
@@ -244,7 +245,22 @@ $(document).on("tap", "#concernList.patient-view li a.close", function() {
 $(document).on("tap", "#concernList.doctor-view li a.close", function() {
 	$(this).parent().addClass('ui-disabled');
 	// TODO: change in database
-	 	
+	var liId = $(this).parent().attr('id');
+	console.log('id', $(this).parent().attr('id'));
+	db.transaction(function(transaction) {
+		var sql = "UPDATE concerns SET checked='" + new Date() + "' WHERE id='" + liId + "'";
+		console.log('concernlist change sql', sql);
+		transaction.executeSql(
+			sql,
+			undefined,
+			function(transaction, result) {
+				console.log(result);
+			},
+			function(transaction, err) {
+				console.error(err);
+			}
+		);
+	});
 	return false;
 });
 
@@ -340,9 +356,9 @@ function display_concerns_filtered(sorted_by, filtered_by) {
 	console.log('displaying concerns sorted by ' + sorted_by + ' filtered by ' + filtered_by);
 	
 	db.transaction( function(transaction) {
-		var sql = "SELECT * FROM concerns"
+		var sql = "SELECT * FROM concerns WHERE checked IS NULL"
 		if (filtered_by != null) {
-			sql += " WHERE assigned LIKE '%doctor-" + filtered_by + "%'";
+			sql += " AND assigned LIKE '%doctor-" + filtered_by + "%'";
 		}
 		if (sorted_by == 'date') {
 			sql += " ORDER BY " + sorted_by + ' DESC';
@@ -369,7 +385,7 @@ function display_concerns_filtered(sorted_by, filtered_by) {
 							$("#concernList").append(
 								"<li id='" + row.id + "' class='ui-li-has-alt'>"
 								+ "<a style='background-color: #" + color + ";' href='#AddTasks' onclick='set_details("+row.id+")' class='ui-btn'>" + row.concernName + "</a>" 
-								+ "<a href='#' data-icon='delete' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
+								+ "<a href='#' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
 								+ "</li>"
 							);
 						}
@@ -453,7 +469,18 @@ $(document).on('tap', '#visit-doctor-selected', function() {
 	$('#begin-visit-button').css('display', 'none');
 	$('#concernList').removeClass('patient-view');
 	$('#concernList').addClass('doctor-view');
-})
+
+	$('#visit-complete-button').css('display', 'block');
+	$('#back-task-view').css('display', 'block');
+});
+
+$(document).on('tap', '#back-task-view', function() {
+	location.reload();
+});
+
+$(document).on('tap', '#visit-complete-button', function() {
+	location.reload();
+});
 
 
 

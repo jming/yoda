@@ -89,9 +89,10 @@
 	</div>
 </div>
 
-<div data-role="page" id="TaskView" data-add-back-btn="true">
+<div data-role="page" id="TaskView">
 	
 	<div data-role="header" data-theme="a">
+		<a href="#TaskView" data-role="button" data-theme="a" id='back-task-view' style='display:none;'>Back</a>
 		<h1 id="concerns-list-header">Concerns</h1>
 		<a href="#visit-menu" data-role='button' id="patientProfile" style="background:transparent;border:0px;shadow:0px;" class='ui-btn-right ui-icon-delete ui-btn-icon-left'>
 			<img style="max-height:45px;" src="assets/yoda.png">
@@ -124,6 +125,7 @@
 		</div>
 		<button id='clear-all-concerns'>Clear concerns</button>
 		<a href='#visit-prepare-doctors' data-role='button' data-rel='popup' style='background:#458B00;color:white;text-shadow:none;' id='begin-visit-button'>Begin Visit</a>
+		<a href='#TaskView' data-role='button' id='visit-complete-button' style='display:none;'>Complete Visit</a>
 		<div data-role='popup' id='visit-prepare-doctors' class='ui-content' data-dismissible='false' data-position-to='window' data-overlay-theme='a'>
 			<div style='padding:20px;'>
 				<h2>Who will you be visiting?</h2>
