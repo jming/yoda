@@ -4,12 +4,12 @@ var db = openDatabase("Test", "1.0", "Test", 65535);
 db.transaction (function (transaction) {
 	var sql = "CREATE TABLE IF NOT EXISTS concerns "
 		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
-		+ "concernName VARCHAR(100) NOT NULL, "
+		+ "name VARCHAR(100) NOT NULL, "
 		+ "date DATETIME NOT NULL, " 
 		+ "assigned VARCHAR(100) NOT NULL, "
 		+ "urgency VARCHAR(100) NOT NULL, "
 		+ "notes TEXT NOT NULL, "
-		+ "concernOrder INTEGER, "
+		+ "ordering INTEGER, "
 		+ "checked DATETIME)"
 	transaction.executeSql(
 		sql, 
@@ -25,7 +25,7 @@ db.transaction (function (transaction) {
 db.transaction (function (transaction) {
 	var sql = "CREATE TABLE IF NOT EXISTS doctors "
 		+ " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," 
-		+ "doctorName VARCHAR(100) NOT NULL, " 
+		+ "name VARCHAR(100) NOT NULL, " 
 		+ "specialty VARCHAR(100) NOT NULL)"
 	transaction.executeSql(
 		sql,
@@ -71,38 +71,22 @@ $(document).on('tap', '#clear-all-concerns', function () {
 var DEFAULT_SORT = "date";
 display_concerns(DEFAULT_SORT)
 
-function load_landing_page() {
-
-	$.mobile.changePage("#LandingPage");
-
-	var $concern = $("#taskName");
-	var $concernList = $("#concernList");
-
-	// fill in information
-	$("#info-name").val(localStorage.name);
-	$("#info-age").val(localStorage.age);
-	$("#info-update").val(localStorage.updated);
-
-	display_concerns(DEFAULT_SORT);
-
-}
-
 // navigate to add concern page
 $(document).on('tap', '#add-concern-button', function() {
 	// delete the values in everything
-	$('#taskName').val('');
+	$('#concernName').val('');
  	$('#concern-notes').val('');
 	// change heading
-	$('#add-tasks-heading').text('New Concern');
+	$('#add-concerns-heading').text('New Concern');
 	// make everything not disabled
-	$('#taskName').prop('disabled', false).trigger('create');
+	$('#concernName').prop('disabled', false).trigger('create');
 	$('#date-field').css('display', 'none');
 	$('#concern-notes').prop('disabled', false).trigger('create');
-	$('#addConcern').css('display', 'block');
-	$('#addDoctorButton').css('display','block');
+	$('#add-concern-action').css('display', 'block');
+	$('#add-doctor-button').css('display','block');
 
-	$('#AddTasks').on('pageshow', function() {
-		if ($('#taskName').val() == "") {
+	$('#add-concern').on('pageshow', function() {
+		if ($('#concernName').val() == "") {
 			$('#urgency-choices input').checkboxradio('enable');
 			$('#urgency-choices input').prop('checked', false);
 			$('#urgency-choices input').checkboxradio('refresh');
@@ -120,7 +104,7 @@ $(document).on('tap', '#add-concern-button', function() {
 $(document).on('tap', '#add-doctor-action', function () {
 	console.log('derp');
 	db.transaction(function(transaction) {
-		var sql = 'INSERT INTO doctors (doctorName, specialty) VALUES (?, ?)';
+		var sql = 'INSERT INTO doctors (name, specialty) VALUES (?, ?)';
 		transaction.executeSql(
 			sql,
 			[$('#doctor-name').val(), $('#doctor-specialty').val()],
@@ -150,14 +134,14 @@ function display_assigned_choices() {
 			undefined,
 			function(transaction, result) {
 				if (result.rows.length) {
-					$('#noDoctors').css('display', 'none');
+					$('#no-doctor').css('display', 'none');
 					var doctors_displayed = $('#assigned-choices-other input').length
 					for (var i=doctors_displayed; i<result.rows.length; i++) {
 						var row = result.rows.item(i);
 						var doctorId = 'doctor-' + row.id;
 						$('#assigned-choices-other').append(
 							"<input type='checkbox' name='" + doctorId + "' id='" + doctorId + "' />"
-							+ "<label for='" + doctorId + "'>" + row.doctorName + "</label>"
+							+ "<label for='" + doctorId + "'>" + row.name + "</label>"
 						).trigger('create');
 					}
 				}
@@ -170,8 +154,8 @@ function display_assigned_choices() {
 }
 
 // Add concern
-$(document).on("tap", "#addConcern", function() {
-	var $concern = $("#taskName").val();
+$(document).on("tap", "#add-concern-action", function() {
+	var $concern = $("#concernName").val();
 	var $i = 0;
 	var urgency = $('#urgency-choices input:checked').attr('id');
 	var assigned_checked = $('#assigned-choices input:checked');
@@ -183,17 +167,17 @@ $(document).on("tap", "#addConcern", function() {
 		}
 		console.log(assigned_to);
 		db.transaction(function (transaction) {
-			var sql = "INSERT INTO concerns (concernName, date, assigned, urgency, notes, concernOrder) VALUES (?, ?, ?, ?, ?, ?)";
+			var sql = "INSERT INTO concerns (name, date, assigned, urgency, notes, ordering) VALUES (?, ?, ?, ?, ?, ?)";
 			transaction.executeSql(
 				sql, 
 				[$concern, new Date(), assigned_to, urgency, $('#concern-notes').val(), 0], 
 				function(transaction, result) {
 					console.log([$concern, new Date(), assigned_to, urgency, 0]);
-					$("#noErrors").css("display","none");
+					$("#no-concern").css("display","none");
 					$i = result.insertId;
 
 					db.transaction(function (transaction) {
-						var sql = "UPDATE concerns SET concernOrder=" + $("#concernList").children().size() + " WHERE id=" + $i;
+						var sql = "UPDATE concerns SET ordering=" + $("#concern-list").children().size() + " WHERE id=" + $i;
 						transaction.executeSql(
 							sql, 
 							undefined, 
@@ -211,8 +195,8 @@ $(document).on("tap", "#addConcern", function() {
 					$('#urgency-choices #High').prop('checked', true);
 
 					display_concerns(DEFAULT_SORT);
-					$.mobile.changePage("#TaskView");		
-					$("#taskName").val("");
+					$.mobile.changePage("#concern-list-view");		
+					$("#concernName").val("");
 					$('#concern-notes').val('');
 				},
 				function (transaction, error) {
@@ -226,11 +210,11 @@ $(document).on("tap", "#addConcern", function() {
 });
 
 
-// Remove Task
-$(document).on("tap", "#concernList.patient-view li a.close", function() {
+// Remove concern
+$(document).on("tap", "#concern-list.patient-view li a.close", function() {
 	$i = $(this).parent().attr("id");
 	db.transaction(function (transaction) {
-		var sql = "UPDATE concerns SET concernOrder=-1 WHERE id=" + $i;
+		var sql = "UPDATE concerns SET ordering=-1 WHERE id=" + $i;
 		transaction.executeSql(
 			sql,
 			undefined,
@@ -248,15 +232,15 @@ $(document).on("tap", "#concernList.patient-view li a.close", function() {
 	return false;
 });
 
-// Disable Task during visit
-$(document).on("tap", "#concernList.doctor-view li a.close", function() {
+// Disable concern during visit
+$(document).on("tap", "#concern-list.doctor-view li a.close", function() {
 	$(this).parent().addClass('ui-disabled');
 	// TODO: change in database
 	var liId = $(this).parent().attr('id');
 	console.log('id', $(this).parent().attr('id'));
 	db.transaction(function(transaction) {
 		var sql = "UPDATE concerns SET checked='" + new Date() + "' WHERE id='" + liId + "'";
-		console.log('concernlist change sql', sql);
+		console.log('concern-list change sql', sql);
 		transaction.executeSql(
 			sql,
 			undefined,
@@ -271,18 +255,18 @@ $(document).on("tap", "#concernList.doctor-view li a.close", function() {
 	return false;
 });
 
-// sort order of tasks
+// sort order of concerns
 $(document).bind('pageinit', function() {
 
-    $( "#concernList" ).sortable();
-    $( "#concernList" ).disableSelection();
-    $( "#concernList" ).bind( "sortstop", function(event, ui) {
-    	var $concernLi = $("#concernList li");
+    $( "#concern-list" ).sortable();
+    $( "#concern-list" ).disableSelection();
+    $( "#concern-list" ).bind( "sortstop", function(event, ui) {
+    	var $concernLi = $("#concern-list li");
 		db.transaction(function (transaction) {
 			for (var i = 0; i < $concernLi.length; i++) {
 				var elementId = $concernLi[i].id;
-				var concernOrder = i + 1;
-				var sql = "UPDATE concerns SET concernOrder=" + concernOrder + " WHERE id=" + elementId;
+				var order = i + 1;
+				var sql = "UPDATE concerns SET ordering=" + order + " WHERE id=" + elementId;
 				transaction.executeSql(
 					sql,
 					undefined,
@@ -296,35 +280,35 @@ $(document).bind('pageinit', function() {
 			}
 		});
 		$('ul').listview('refresh');
-    	$('#concernList').listview('refresh');
+    	$('#concern-list').listview('refresh');
     });
 });
 
 // select order for display
 $(function () {
-	$('#sort-concerns').change(function() {
+	$('#concern-list-sort').change(function() {
 
-		var selected = $('#sort-concerns option:selected').val();
+		var selected = $('#concern-list-sort option:selected').val();
 		display_concerns(selected);
 
 		return false
 	});
 })
 
-// set details for given task!
+// set details for given concern!
 function set_details(id) {
 
 	// change heading
-	$('#add-tasks-heading').text('Concern Details');
+	$('#add-concerns-heading').text('Concern Details');
 	// make everything disabled
-	$('#taskName').prop('disabled', true).trigger('create');
+	$('#concernName').prop('disabled', true).trigger('create');
 	$('#date-field').css('display','inline');
 	$('#concern-notes').prop('disabled', true).trigger('create');
 	// show the doctors
 	display_assigned_choices();
 	// hide the button
-	$('#addConcern').css('display', 'none');
-	$('#addDoctorButton').css('display','none');
+	$('#add-concern-action').css('display', 'none');
+	$('#add-doctor-button').css('display','none');
 	db.transaction(function (transaction) {
 		var sql = "SELECT * FROM concerns WHERE id=" + id;
 		transaction.executeSql(
@@ -333,8 +317,8 @@ function set_details(id) {
 			function (transaction, result) {
 				// console.log('inside set details')
 				var item = result.rows.item(0);
-				// console.log(item.pendingFor, item.urgency)
-				$("#taskName")[0].value = item.concernName;
+				// console.log(item.assigned, item.urgency)
+				$("#concernName")[0].value = item.name;
 				$('#detail-date')[0].value = item.date;
 				var assigned_to = item.assigned.split(',');
 				console.log(assigned_to);
@@ -358,7 +342,7 @@ function set_details(id) {
 function display_concerns_filtered(sorted_by, filtered_by) {
 
 	// fix the selector
-	$("#sort-concerns").val(sorted_by).attr('selected', true).siblings('option').removeAttr('selected');
+	$("#concern-list-sort").val(sorted_by).attr('selected', true).siblings('option').removeAttr('selected');
 	$('#doctor-select').selectmenu('refresh', true);
 
 	console.log('displaying concerns sorted by ' + sorted_by + ' filtered by ' + filtered_by);
@@ -380,19 +364,19 @@ function display_concerns_filtered(sorted_by, filtered_by) {
 			function (transaction, result) {
 				console.log(result.rows);
 				if (result.rows.length) {
-					$("#concernList").empty();
-					$("#noErrors").css("display","none");
+					$("#concern-list").empty();
+					$("#no-concern").css("display","none");
 					for (var i = 0; i < result.rows.length; i++) {
 						var row = result.rows.item(i);
-						if (row.concernOrder != -1) {
+						if (row.ordering != -1) {
 							var color = "99ff99";
 							if (row.urgency == "Medium")
 								color = "ffff99";
 							else if (row.urgency == "High")
 								color = "ff9999";
-							$("#concernList").append(
+							$("#concern-list").append(
 								"<li id='" + row.id + "' class='ui-li-has-alt'>"
-								+ "<a style='background-color: #" + color + ";' href='#AddTasks' onclick='set_details("+row.id+")' class='ui-btn'>" + row.concernName + "</a>" 
+								+ "<a style='background-color: #" + color + ";' href='#add-concern' onclick='set_details("+row.id+")' class='ui-btn'>" + row.name + "</a>" 
 								+ "<a href='#' class='close ui-btn ui-btn-icon-notext ui-icon-delete'>Delete</a>"
 								+ "</li>"
 							);
@@ -411,8 +395,8 @@ function display_concerns(sorted_by) {
 	display_concerns_filtered(sorted_by, null);
 }
 
-$(document).on('tap', '#begin-visit-button', function() {
-	console.log('begin-visit-button tapped');
+$(document).on('tap', '#visit-begin-button', function() {
+	console.log('visit-begin-button tapped');
 	// $('#visit-prepare-doctors').popup();
 	// setTimeout(function() {
 		
@@ -431,7 +415,7 @@ $(document).on('tap', '#begin-visit-button', function() {
 					for (var i=0; i<result.rows.length; i++) {
 						var row = result.rows.item(i);
 						$('#visit-doctor-select')
-							.append("<option value='" + row.id + "'>" + row.doctorName + "</option>")
+							.append("<option value='" + row.id + "'>" + row.name + "</option>")
 							.trigger('create');
 					}
 				}
@@ -458,7 +442,7 @@ $(document).on('tap', '#visit-doctor-selected', function() {
 				var doctorInfo = result.rows.item(0);
 				console.log(doctorInfo);
 				$('#visit-doctor-information').append(
-					"<h2>" + doctorInfo.doctorName + "</h2>"
+					"<h2>" + doctorInfo.name + "</h2>"
 					+ "<p>Specialty: " + doctorInfo.specialty
 					+ "</p><p>Visit date: " + new Date() + "</p>"
 					// TODO: change formatting of date
@@ -471,18 +455,18 @@ $(document).on('tap', '#visit-doctor-selected', function() {
 		);
 	});
 
-	$('#concerns-list-header').text('Visit')
+	$('#concern-list-header').text('Visit')
 	$('#add-concern-button').css('display', 'none');
 	$('#clear-all-concerns').css('display', 'none');
-	$('#begin-visit-button').css('display', 'none');
-	$('#concernList').removeClass('patient-view');
-	$('#concernList').addClass('doctor-view');
+	$('#visit-begin-button').css('display', 'none');
+	$('#concern-list').removeClass('patient-view');
+	$('#concern-list').addClass('doctor-view');
 
 	$('#visit-complete-button').css('display', 'block');
-	$('#back-task-view').css('display', 'block');
+	$('#back-concern-view').css('display', 'block');
 });
 
-$(document).on('tap', '#back-task-view', function() {
+$(document).on('tap', '#back-concern-view', function() {
 	location.reload();
 });
 
